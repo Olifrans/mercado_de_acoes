@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FinPro - Market Terminal</title>
+    <title>FinPro Professional - Market Terminal</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
@@ -23,13 +23,16 @@
             --border: #e5e7eb;
             --up: #10b981;
             --down: #ef4444;
+            --warning: #f59e0b;
             --up-bg: rgba(16, 185, 129, 0.1);
             --down-bg: rgba(239, 68, 68, 0.1);
-            --gradient-up: linear-gradient(180deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0) 100%);
-            --gradient-down: linear-gradient(180deg, rgba(239, 68, 68, 0.15) 0%, rgba(239, 68, 68, 0) 100%);
+            --warning-bg: rgba(245, 158, 11, 0.1);
             --shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
             --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
             --radius: 12px;
+            --radius-sm: 8px;
+            --transition: all 0.2s ease;
         }
 
         [data-theme="dark"] {
@@ -42,6 +45,7 @@
             --border: #334155;
             --up-bg: rgba(16, 185, 129, 0.2);
             --down-bg: rgba(239, 68, 68, 0.2);
+            --warning-bg: rgba(245, 158, 11, 0.2);
         }
 
         * {
@@ -56,10 +60,11 @@
             color: var(--text-primary);
             font-size: 14px;
             line-height: 1.5;
-            transition: background 0.3s, color 0.3s;
+            transition: var(--transition);
+            overflow-x: hidden;
         }
 
-        /* Sidebar */
+        /* ===== SIDEBAR ===== */
         .sidebar {
             width: 260px;
             background: var(--bg-sidebar);
@@ -69,7 +74,7 @@
             height: 100vh;
             overflow-y: auto;
             z-index: 1000;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow-lg);
             display: flex;
             flex-direction: column;
         }
@@ -85,10 +90,14 @@
             font-size: 24px;
             font-weight: 800;
             margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
         .sidebar-header .tagline {
-            font-size: 12px;
+            font-size: 11px;
             opacity: 0.9;
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -104,7 +113,7 @@
             margin-bottom: 8px;
             border-radius: var(--radius);
             cursor: pointer;
-            transition: all 0.2s;
+            transition: var(--transition);
             display: flex;
             align-items: center;
             gap: 12px;
@@ -146,7 +155,7 @@
             cursor: pointer;
             font-size: 13px;
             font-weight: 600;
-            transition: all 0.2s;
+            transition: var(--transition);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -157,7 +166,7 @@
             background: rgba(255, 255, 255, 0.2);
         }
 
-        /* Main Content */
+        /* ===== MAIN CONTENT ===== */
         .main-content {
             margin-left: 260px;
             padding: 24px;
@@ -165,7 +174,7 @@
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
         }
 
@@ -188,6 +197,7 @@
             display: flex;
             gap: 12px;
             align-items: center;
+            flex-wrap: wrap;
         }
 
         .date-display {
@@ -202,13 +212,54 @@
             border: 1px solid var(--border);
         }
 
+        .api-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: var(--bg-card);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            font-size: 12px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--up);
+            animation: pulse 2s infinite;
+        }
+
+        .status-dot.error {
+            background: var(--down);
+            animation: none;
+        }
+
+        .status-dot.loading {
+            background: var(--warning);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
+
         .btn {
             padding: 10px 20px;
             border-radius: 8px;
             border: none;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: var(--transition);
             font-size: 13px;
             display: inline-flex;
             align-items: center;
@@ -236,6 +287,16 @@
             background: var(--bg-primary);
         }
 
+        .btn-warning {
+            background: var(--warning);
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: #d97706;
+        }
+
+        /* ===== GRID SYSTEM ===== */
         .grid {
             display: grid;
             gap: 20px;
@@ -252,6 +313,16 @@
 
         .grid-4 {
             grid-template-columns: repeat(4, 1fr);
+        }
+
+        .grid-5 {
+            grid-template-columns: repeat(5, 1fr);
+        }
+
+        @media (max-width: 1200px) {
+            .grid-5 {
+                grid-template-columns: repeat(3, 1fr);
+            }
         }
 
         @media (max-width: 1024px) {
@@ -280,12 +351,18 @@
 
             .grid-2,
             .grid-3,
-            .grid-4 {
+            .grid-4,
+            .grid-5 {
                 grid-template-columns: 1fr;
             }
 
             .menu-toggle {
                 display: block !important;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
             }
         }
 
@@ -301,16 +378,18 @@
             border-radius: 8px;
             color: white;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            box-shadow: var(--shadow-md);
         }
 
+        /* ===== CARDS ===== */
         .card {
             background: var(--bg-card);
             border-radius: var(--radius);
             padding: 20px;
             box-shadow: var(--shadow);
             border: 1px solid var(--border);
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: var(--transition);
+            position: relative;
         }
 
         .card:hover {
@@ -318,11 +397,28 @@
             box-shadow: var(--shadow-md);
         }
 
+        .card.loading::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius);
+            z-index: 10;
+        }
+
         .card-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
             margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 12px;
         }
 
         .card-title {
@@ -369,6 +465,11 @@
             color: #ea580c;
         }
 
+        .icon-yellow {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
         .price {
             font-size: 28px;
             font-weight: 700;
@@ -395,6 +496,11 @@
             background: var(--down-bg);
         }
 
+        .change.neutral {
+            color: var(--text-secondary);
+            background: var(--bg-primary);
+        }
+
         .chart-container {
             position: relative;
             height: 200px;
@@ -405,6 +511,11 @@
             height: 350px;
         }
 
+        .chart-container.small {
+            height: 120px;
+        }
+
+        /* ===== INDEX LIST ===== */
         .index-list {
             display: flex;
             flex-direction: column;
@@ -417,7 +528,7 @@
             justify-content: space-between;
             padding: 12px;
             border-radius: 8px;
-            transition: background 0.2s;
+            transition: var(--transition);
             cursor: pointer;
         }
 
@@ -475,6 +586,7 @@
             color: var(--down);
         }
 
+        /* ===== DOMINANCE BAR ===== */
         .dominance-bar {
             height: 8px;
             border-radius: 4px;
@@ -496,7 +608,7 @@
         }
 
         .dominance-others {
-            background: #10b981;
+            background: var(--up);
         }
 
         .dominance-legend {
@@ -518,6 +630,7 @@
             border-radius: 50%;
         }
 
+        /* ===== COMMODITIES ===== */
         .commodity-item {
             display: flex;
             align-items: center;
@@ -570,6 +683,7 @@
             font-weight: 600;
         }
 
+        /* ===== INFLATION CHART ===== */
         .inflation-chart {
             display: flex;
             align-items: flex-end;
@@ -596,6 +710,7 @@
             color: var(--text-muted);
         }
 
+        /* ===== FORMS ===== */
         .form-group {
             margin-bottom: 16px;
         }
@@ -619,7 +734,7 @@
             font-family: inherit;
             background: var(--bg-card);
             color: var(--text-primary);
-            transition: border-color 0.2s;
+            transition: var(--transition);
         }
 
         .form-input:focus,
@@ -627,6 +742,7 @@
         .form-textarea:focus {
             outline: none;
             border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
 
         .form-grid {
@@ -641,6 +757,13 @@
             }
         }
 
+        .form-hint {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* ===== TABLES ===== */
         .table-container {
             overflow-x: auto;
             border-radius: 8px;
@@ -660,6 +783,9 @@
             color: var(--text-secondary);
             text-transform: uppercase;
             background: var(--bg-primary);
+            position: sticky;
+            top: 0;
+            z-index: 5;
         }
 
         td {
@@ -671,6 +797,7 @@
             background: var(--bg-primary);
         }
 
+        /* ===== BADGES ===== */
         .badge {
             padding: 4px 8px;
             border-radius: 6px;
@@ -688,6 +815,17 @@
             color: var(--down);
         }
 
+        .badge-dividend {
+            background: var(--warning-bg);
+            color: var(--warning);
+        }
+
+        .badge-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        /* ===== NAV TABS ===== */
         .nav-tabs {
             display: flex;
             gap: 8px;
@@ -703,7 +841,7 @@
             cursor: pointer;
             font-weight: 600;
             font-size: 14px;
-            transition: all 0.2s;
+            transition: var(--transition);
             white-space: nowrap;
         }
 
@@ -737,6 +875,7 @@
             }
         }
 
+        /* ===== LINKS ===== */
         .link {
             color: #667eea;
             text-decoration: none;
@@ -748,12 +887,14 @@
             text-decoration: underline;
         }
 
+        /* ===== SECTIONS ===== */
         .section-title {
             font-size: 16px;
             font-weight: 700;
             margin-bottom: 16px;
         }
 
+        /* ===== KPI CARDS ===== */
         .kpi-card {
             background: var(--bg-card);
             border-radius: var(--radius);
@@ -771,6 +912,10 @@
             border-left-color: var(--down);
         }
 
+        .kpi-card.warning {
+            border-left-color: var(--warning);
+        }
+
         .kpi-value {
             font-size: 24px;
             font-weight: 700;
@@ -783,6 +928,13 @@
             font-weight: 500;
         }
 
+        .kpi-sublabel {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* ===== FILTERS ===== */
         .filters {
             display: flex;
             gap: 12px;
@@ -795,6 +947,7 @@
             min-width: 150px;
         }
 
+        /* ===== MODAL ===== */
         .modal {
             display: none;
             position: fixed;
@@ -817,9 +970,10 @@
             background: var(--bg-card);
             padding: 24px;
             border-radius: var(--radius);
-            max-width: 500px;
+            max-width: 600px;
             width: 90%;
             animation: slideUp 0.3s;
+            border: 1px solid var(--border);
         }
 
         @keyframes slideUp {
@@ -858,6 +1012,7 @@
             margin-top: 20px;
         }
 
+        /* ===== TOAST ===== */
         .toast-container {
             position: fixed;
             top: 20px;
@@ -874,7 +1029,11 @@
             color: white;
             font-weight: 500;
             animation: slideIn 0.3s;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 280px;
         }
 
         .toast.success {
@@ -889,6 +1048,10 @@
             background: #667eea;
         }
 
+        .toast.warning {
+            background: var(--warning);
+        }
+
         @keyframes slideIn {
             from {
                 transform: translateX(100%);
@@ -901,6 +1064,7 @@
             }
         }
 
+        /* ===== EMPTY STATE ===== */
         .empty-state {
             text-align: center;
             padding: 40px;
@@ -912,28 +1076,259 @@
             margin-bottom: 16px;
             opacity: 0.3;
         }
+
+        /* ===== LOADING SKELETON ===== */
+        .loading-skeleton {
+            background: linear-gradient(90deg, var(--bg-primary) 25%, var(--border) 50%, var(--bg-primary) 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border-radius: var(--radius);
+        }
+
+        @keyframes loading {
+            0% {
+                background-position: 200% 0;
+            }
+
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        /* ===== LAST UPDATE ===== */
+        .last-update {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .last-update i {
+            font-size: 10px;
+        }
+
+        /* ===== DIVIDEND CARD ===== */
+        .dividend-card {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(245, 158, 11, 0.05) 100%);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: var(--radius);
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        .dividend-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .dividend-amount {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--warning);
+        }
+
+        .dividend-date {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .dividend-yield {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--warning);
+        }
+
+        /* ===== WATCHLIST ===== */
+        .watchlist-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            border-radius: 8px;
+            transition: var(--transition);
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+
+        .watchlist-item:hover {
+            background: var(--bg-primary);
+            border-color: var(--border);
+        }
+
+        .watchlist-item.active {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .watchlist-symbol {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .watchlist-logo {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--bg-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 12px;
+            color: #667eea;
+            border: 1px solid var(--border);
+        }
+
+        .watchlist-name {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .watchlist-ticker {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .watchlist-price {
+            text-align: right;
+        }
+
+        .watchlist-current {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .watchlist-change {
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        /* ===== API KEY INPUT ===== */
+        .api-key-input {
+            position: relative;
+        }
+
+        .api-key-input input {
+            padding-right: 40px;
+        }
+
+        .api-key-toggle {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        /* ===== PROGRESS BAR ===== */
+        .progress-bar {
+            height: 6px;
+            background: var(--bg-primary);
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 8px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 3px;
+            transition: width 0.3s;
+        }
+
+        /* ===== STAT ROW ===== */
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .stat-row:last-child {
+            border-bottom: none;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+
+        .stat-value {
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        /* ===== RESPONSIVE UTILS ===== */
+        @media (max-width: 768px) {
+            .header-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .kpi-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filters {
+                flex-direction: column;
+            }
+
+            .filter-group {
+                min-width: 100%;
+            }
+        }
+
+        /* ===== PRINT STYLES ===== */
+        @media print {
+
+            .sidebar,
+            .menu-toggle,
+            .btn,
+            .filters {
+                display: none !important;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 0;
+            }
+
+            .card {
+                break-inside: avoid;
+            }
+        }
     </style>
 </head>
 
 <body>
     <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
 
-    <!-- Sidebar -->
+    <!-- ===== SIDEBAR ===== -->
     <nav class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <h1>💼 FinPro</h1>
-            <p class="tagline">Market Terminal</p>
+            <h1><i class="fas fa-chart-line"></i> FinPro</h1>
+            <p class="tagline">Professional Market Terminal</p>
         </div>
         <ul class="nav-menu">
-            <li class="nav-item active" data-tab="dashboard"><i class="fas fa-chart-line"></i><span>Dashboard</span>
-            </li>
+            <li class="nav-item active" data-tab="dashboard"><i class="fas fa-home"></i><span>Dashboard</span></li>
             <li class="nav-item" data-tab="mercado"><i class="fas fa-globe"></i><span>Mercado</span></li>
+            <li class="nav-item" data-tab="dividendos"><i class="fas fa-gift"></i><span>Dividendos</span></li>
             <li class="nav-item" data-tab="operacoes"><i class="fas fa-exchange-alt"></i><span>Operações</span></li>
             <li class="nav-item" data-tab="portfolio"><i class="fas fa-briefcase"></i><span>Portfólio</span></li>
             <li class="nav-item" data-tab="analise"><i class="fas fa-chart-bar"></i><span>Análise</span></li>
             <li class="nav-item" data-tab="configuracoes"><i class="fas fa-cog"></i><span>Configurações</span></li>
         </ul>
         <div class="sidebar-footer">
+            <button id="refreshData" class="btn-sidebar"><i class="fas fa-sync"></i> Atualizar</button>
             <button id="exportData" class="btn-sidebar"><i class="fas fa-download"></i> Exportar</button>
             <button id="importData" class="btn-sidebar"><i class="fas fa-upload"></i> Importar</button>
             <button id="toggleTheme" class="btn-sidebar"><i class="fas fa-moon"></i> Tema</button>
@@ -941,46 +1336,59 @@
         </div>
     </nav>
 
-    <!-- Main Content -->
+    <!-- ===== MAIN CONTENT ===== -->
     <main class="main-content">
         <div class="container">
             <div class="header">
                 <h1 id="pageTitle">Dashboard</h1>
                 <div class="header-actions">
+                    <div class="api-status" id="apiStatus">
+                        <div class="status-dot" id="statusDot"></div>
+                        <span id="statusText">Conectado</span>
+                    </div>
                     <div class="date-display"><i class="fas fa-calendar"></i><span id="currentDate"></span></div>
                     <button class="btn btn-primary" id="addOperationQuick"><i class="fas fa-plus"></i> Nova
                         Operação</button>
                 </div>
             </div>
 
-            <!-- TAB: Dashboard -->
+            <!-- ===== TAB: DASHBOARD ===== -->
             <div class="tab-content active" id="tab-dashboard">
                 <div class="grid grid-4">
                     <div class="kpi-card">
                         <div class="kpi-label">Total Investido</div>
                         <div class="kpi-value" id="totalInvested">R$ 0,00</div>
-                        <div style="font-size: 13px; color: var(--text-muted);">Compras totais</div>
+                        <div class="kpi-sublabel">Compras totais</div>
                     </div>
                     <div class="kpi-card success">
                         <div class="kpi-label">Lucro/Prejuízo</div>
                         <div class="kpi-value" id="realizedPL">R$ 0,00</div>
-                        <div style="font-size: 13px; color: var(--text-muted);">Posição líquida</div>
+                        <div class="kpi-sublabel">Posição líquida</div>
+                    </div>
+                    <div class="kpi-card warning">
+                        <div class="kpi-label">Dividendos Recebidos</div>
+                        <div class="kpi-value" id="totalDividends">R$ 0,00</div>
+                        <div class="kpi-sublabel">Acumulado</div>
                     </div>
                     <div class="kpi-card">
                         <div class="kpi-label">Ativos no Portfólio</div>
                         <div class="kpi-value" id="totalAssets">0</div>
-                        <div style="font-size: 13px; color: var(--text-muted);">Posições abertas</div>
-                    </div>
-                    <div class="kpi-card">
-                        <div class="kpi-label">Operações Totais</div>
-                        <div class="kpi-value" id="totalOperations">0</div>
-                        <div style="font-size: 13px; color: var(--text-muted);">Registradas</div>
+                        <div class="kpi-sublabel"><span id="totalOperations">0</span> operações</div>
                     </div>
                 </div>
+
                 <div class="grid grid-2">
                     <div class="card">
                         <div class="card-header">
                             <div class="card-title"><i class="fas fa-chart-line"></i> Performance do Portfólio</div>
+                            <select class="form-select" id="perfPeriod"
+                                style="width: auto; padding: 6px 12px; font-size: 12px;">
+                                <option value="30">30 dias</option>
+                                <option value="90">90 dias</option>
+                                <option value="180">6 meses</option>
+                                <option value="365" selected>1 ano</option>
+                                <option value="all">Todo período</option>
+                            </select>
                         </div>
                         <div class="chart-container large"><canvas id="portfolioPerformanceChart"></canvas></div>
                     </div>
@@ -991,46 +1399,115 @@
                         <div class="chart-container large"><canvas id="assetDistributionChart"></canvas></div>
                     </div>
                 </div>
+
+                <!-- Watchlist -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title"><i class="fas fa-star"></i> Watchlist</div>
+                        <button class="btn btn-secondary btn-sm" id="addWatchlistBtn"><i class="fas fa-plus"></i>
+                            Adicionar</button>
+                    </div>
+                    <div id="watchlistContainer">
+                        <div class="watchlist-item">
+                            <div class="watchlist-symbol">
+                                <div class="watchlist-logo">PE</div>
+                                <div>
+                                    <div class="watchlist-name">Petrobras</div>
+                                    <div class="watchlist-ticker">PETR4</div>
+                                </div>
+                            </div>
+                            <div class="watchlist-price">
+                                <div class="watchlist-current" id="wl-petr4">R$ 38,52</div>
+                                <div class="watchlist-change down" id="wl-petr4-change">-1.23%</div>
+                            </div>
+                        </div>
+                        <div class="watchlist-item">
+                            <div class="watchlist-symbol">
+                                <div class="watchlist-logo">VA</div>
+                                <div>
+                                    <div class="watchlist-name">Vale</div>
+                                    <div class="watchlist-ticker">VALE3</div>
+                                </div>
+                            </div>
+                            <div class="watchlist-price">
+                                <div class="watchlist-current" id="wl-vale3">R$ 62,30</div>
+                                <div class="watchlist-change up" id="wl-vale3-change">+0.85%</div>
+                            </div>
+                        </div>
+                        <div class="watchlist-item">
+                            <div class="watchlist-symbol">
+                                <div class="watchlist-logo">AP</div>
+                                <div>
+                                    <div class="watchlist-name">Apple</div>
+                                    <div class="watchlist-ticker">AAPL</div>
+                                </div>
+                            </div>
+                            <div class="watchlist-price">
+                                <div class="watchlist-current" id="wl-aapl">$175,50</div>
+                                <div class="watchlist-change up" id="wl-aapl-change">+1.25%</div>
+                            </div>
+                        </div>
+                        <div class="watchlist-item">
+                            <div class="watchlist-symbol">
+                                <div class="watchlist-logo">₿</div>
+                                <div>
+                                    <div class="watchlist-name">Bitcoin</div>
+                                    <div class="watchlist-ticker">BTC</div>
+                                </div>
+                            </div>
+                            <div class="watchlist-price">
+                                <div class="watchlist-current" id="wl-btc">$73,920</div>
+                                <div class="watchlist-change down" id="wl-btc-change">-0.78%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <!-- TAB: Mercado -->
+            <!-- ===== TAB: MERCADO ===== -->
             <div class="tab-content" id="tab-mercado">
                 <div class="grid grid-2">
-                    <div class="card">
+                    <div class="card" id="cardIbov">
                         <div class="card-header">
                             <div style="display: flex; align-items: center; gap: 12px;">
                                 <div class="icon-circle icon-blue"><i class="fas fa-chart-line"></i></div>
                                 <div>
                                     <div style="font-weight: 600;">IBovespa</div>
-                                    <div style="font-size: 12px; color: var(--text-muted);">IBOV</div>
+                                    <div style="font-size: 12px; color: var(--text-muted);">^IBOV</div>
                                 </div>
                             </div>
-                            <span class="change down" id="ibovChange"><i class="fas fa-arrow-down"></i> -0,73%</span>
+                            <span class="change down" id="ibovChange"><i class="fas fa-arrow-down"></i> -</span>
                         </div>
-                        <div class="price" id="ibovPrice">173.787,49</div>
+                        <div class="price" id="ibovPrice">-</div>
+                        <div class="last-update"><i class="fas fa-clock"></i> <span id="ibovUpdate">Aguardando...</span>
+                        </div>
                         <div class="chart-container"><canvas id="ibovChart"></canvas></div>
                     </div>
-                    <div class="card">
+                    <div class="card" id="cardIndices">
                         <div class="card-header">
-                            <div class="card-title"><i class="fas fa-globe"></i> Principais índices</div>
+                            <div class="card-title"><i class="fas fa-globe"></i> Principais Índices</div>
                         </div>
-                        <div class="index-list" id="indicesList"></div>
-                        <a href="#" class="link">Veja todos os principais índices <i class="fas fa-arrow-right"></i></a>
+                        <div class="index-list" id="indicesList">
+                            <div class="loading-skeleton" style="height: 60px;"></div>
+                            <div class="loading-skeleton" style="height: 60px;"></div>
+                            <div class="loading-skeleton" style="height: 60px;"></div>
+                        </div>
+                        <div class="last-update"><i class="fas fa-clock"></i> <span
+                                id="indicesUpdate">Aguardando...</span></div>
                     </div>
                 </div>
+
                 <div class="grid grid-3">
-                    <div class="card">
+                    <div class="card" id="cardCrypto">
                         <div class="card-header">
                             <div class="card-title">
                                 <div class="icon-circle icon-blue" style="width: 24px; height: 24px; font-size: 12px;">
-                                    <i class="fab fa-bitcoin"></i>
-                                </div> Valor de mercado de Cripto
+                                    <i class="fab fa-bitcoin"></i></div> Criptomoedas
                             </div>
-                            <span class="change down">-1,69%</span>
+                            <span class="change" id="cryptoChange">-</span>
                         </div>
-                        <div style="font-size: 24px; font-weight: 700; margin-bottom: 16px;">2,47T USD</div>
-                        <div class="chart-container" style="height: 120px;"><canvas id="cryptoMarketChart"></canvas>
-                        </div>
+                        <div style="font-size: 24px; font-weight: 700; margin-bottom: 16px;" id="cryptoValue">-</div>
+                        <div class="chart-container small"><canvas id="cryptoMarketChart"></canvas></div>
                         <div style="margin-top: 20px;">
                             <div
                                 style="font-size: 13px; font-weight: 600; margin-bottom: 8px; color: var(--text-secondary);">
@@ -1040,20 +1517,6 @@
                                 <div class="dominance-segment dominance-eth" style="width: 9.9%;"></div>
                                 <div class="dominance-segment dominance-others" style="width: 30.1%;"></div>
                             </div>
-                            <div class="dominance-legend">
-                                <div class="legend-item">
-                                    <div class="legend-dot" style="background: #f7931a;"></div><span>Bitcoin
-                                        60,00%</span>
-                                </div>
-                                <div class="legend-item">
-                                    <div class="legend-dot" style="background: #627eea;"></div><span>Ethereum
-                                        9,90%</span>
-                                </div>
-                                <div class="legend-item">
-                                    <div class="legend-dot" style="background: #10b981;"></div><span>Outros
-                                        30,09%</span>
-                                </div>
-                            </div>
                         </div>
                         <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border);">
                             <div class="commodity-item">
@@ -1061,12 +1524,12 @@
                                     <div class="commodity-icon" style="background: #fff7ed;">₿</div>
                                     <div>
                                         <div class="commodity-name">Bitcoin</div>
-                                        <div class="commodity-symbol">BTCUSD</div>
+                                        <div class="commodity-symbol">BTC-USD</div>
                                     </div>
                                 </div>
                                 <div class="commodity-value">
-                                    <div class="commodity-price" id="btcPrice">73.920</div>
-                                    <div class="commodity-change down">-0,78%</div>
+                                    <div class="commodity-price" id="btcPrice">-</div>
+                                    <div class="commodity-change" id="btcChange">-</div>
                                 </div>
                             </div>
                             <div class="commodity-item">
@@ -1074,30 +1537,34 @@
                                     <div class="commodity-icon" style="background: #eff6ff;">Ξ</div>
                                     <div>
                                         <div class="commodity-name">Ethereum</div>
-                                        <div class="commodity-symbol">ETHUSD</div>
+                                        <div class="commodity-symbol">ETH-USD</div>
                                     </div>
                                 </div>
                                 <div class="commodity-value">
-                                    <div class="commodity-price" id="ethPrice">2.025,7</div>
-                                    <div class="commodity-change down">-0,69%</div>
+                                    <div class="commodity-price" id="ethPrice">-</div>
+                                    <div class="commodity-change" id="ethChange">-</div>
                                 </div>
                             </div>
                         </div>
+                        <div class="last-update"><i class="fas fa-clock"></i> <span
+                                id="cryptoUpdate">Aguardando...</span></div>
                     </div>
-                    <div class="card">
+
+                    <div class="card" id="cardUSD">
                         <div class="card-header">
                             <div class="card-title">
                                 <div class="icon-circle icon-green" style="width: 24px; height: 24px; font-size: 12px;">
-                                    <i class="fas fa-dollar-sign"></i>
-                                </div> USD para BRL
+                                    <i class="fas fa-dollar-sign"></i></div> USD/BRL
                             </div>
-                            <span class="change down" id="usdChange">-0,84%</span>
+                            <span class="change" id="usdChange">-</span>
                         </div>
-                        <div style="font-size: 24px; font-weight: 700; margin-bottom: 16px;" id="usdPrice">5,0361 BRL
+                        <div style="font-size: 24px; font-weight: 700; margin-bottom: 16px;" id="usdPrice">-</div>
+                        <div class="chart-container small"><canvas id="usdChart"></canvas></div>
+                        <div class="last-update"><i class="fas fa-clock"></i> <span id="usdUpdate">Aguardando...</span>
                         </div>
-                        <div class="chart-container" style="height: 120px;"><canvas id="usdChart"></canvas></div>
                     </div>
-                    <div class="card">
+
+                    <div class="card" id="cardCommodities">
                         <div class="card-header">
                             <div class="card-title">
                                 <div class="icon-circle icon-purple"
@@ -1110,26 +1577,13 @@
                                 <div class="commodity-info">
                                     <div class="commodity-icon" style="background: #fee2e2;">🛢️</div>
                                     <div>
-                                        <div class="commodity-name">Petróleo leve</div>
-                                        <div class="commodity-symbol">CL1!</div>
+                                        <div class="commodity-name">Petróleo WTI</div>
+                                        <div class="commodity-symbol">CL=F</div>
                                     </div>
                                 </div>
                                 <div class="commodity-value">
-                                    <div class="commodity-price">87,36 USD</div>
-                                    <div class="commodity-change down">-1,73%</div>
-                                </div>
-                            </div>
-                            <div class="commodity-item">
-                                <div class="commodity-info">
-                                    <div class="commodity-icon" style="background: #eff6ff;">🔥</div>
-                                    <div>
-                                        <div class="commodity-name">Gás natural</div>
-                                        <div class="commodity-symbol">NG1!</div>
-                                    </div>
-                                </div>
-                                <div class="commodity-value">
-                                    <div class="commodity-price">3,290 USD</div>
-                                    <div class="commodity-change up">+0,15%</div>
+                                    <div class="commodity-price" id="oilPrice">-</div>
+                                    <div class="commodity-change" id="oilChange">-</div>
                                 </div>
                             </div>
                             <div class="commodity-item">
@@ -1137,144 +1591,260 @@
                                     <div class="commodity-icon" style="background: #fff7ed;">🥇</div>
                                     <div>
                                         <div class="commodity-name">Ouro</div>
-                                        <div class="commodity-symbol">GC1!</div>
+                                        <div class="commodity-symbol">GC=F</div>
                                     </div>
                                 </div>
                                 <div class="commodity-value">
-                                    <div class="commodity-price">4.593,0 USD</div>
-                                    <div class="commodity-change up">+1,34%</div>
+                                    <div class="commodity-price" id="goldPrice">-</div>
+                                    <div class="commodity-change" id="goldChange">-</div>
                                 </div>
                             </div>
                             <div class="commodity-item">
                                 <div class="commodity-info">
-                                    <div class="commodity-icon" style="background: #fef3c7;">🔧</div>
+                                    <div class="commodity-icon" style="background: #eff6ff;">🔧</div>
                                     <div>
                                         <div class="commodity-name">Cobre</div>
-                                        <div class="commodity-symbol">HG1!</div>
+                                        <div class="commodity-symbol">HG=F</div>
                                     </div>
                                 </div>
                                 <div class="commodity-value">
-                                    <div class="commodity-price">6,3890 USD</div>
-                                    <div class="commodity-change down">-0,58%</div>
+                                    <div class="commodity-price" id="copperPrice">-</div>
+                                    <div class="commodity-change" id="copperChange">-</div>
                                 </div>
                             </div>
                         </div>
+                        <div class="last-update"><i class="fas fa-clock"></i> <span
+                                id="commoditiesUpdate">Aguardando...</span></div>
                     </div>
                 </div>
+
                 <div class="grid grid-2">
-                    <div class="card">
+                    <div class="card" id="cardSelic">
                         <div class="card-header">
                             <div class="card-title">
                                 <div class="icon-circle icon-green" style="width: 24px; height: 24px; font-size: 12px;">
-                                    <i class="fas fa-percentage"></i>
-                                </div> Rendimento do Brasil-10 anos
+                                    <i class="fas fa-percentage"></i></div> Taxa SELIC
                             </div>
-                            <span class="change up">+1,72%</span>
                         </div>
-                        <div style="font-size: 24px; font-weight: 700; margin-bottom: 16px;">6,467%</div>
-                        <div class="chart-container" style="height: 120px;"><canvas id="brasilYieldChart"></canvas>
-                        </div>
+                        <div style="font-size: 28px; font-weight: 700; margin-bottom: 8px;" id="selicRate">-</div>
+                        <div style="color: var(--text-secondary); font-size: 13px;" id="selicDate">-</div>
+                        <div class="last-update"><i class="fas fa-clock"></i> <span
+                                id="selicUpdate">Aguardando...</span></div>
                     </div>
-                    <div class="card">
+                    <div class="card" id="cardInflation">
                         <div class="card-header">
-                            <div class="card-title"><i class="fas fa-chart-bar"></i> Taxa de inflação anual do Brasil
-                            </div>
+                            <div class="card-title"><i class="fas fa-chart-bar"></i> IPCA (Inflação)</div>
                         </div>
-                        <div class="inflation-chart">
-                            <div class="inflation-bar" style="height: 85%;"></div>
-                            <div class="inflation-bar" style="height: 82%;"></div>
-                            <div class="inflation-bar" style="height: 78%;"></div>
-                            <div class="inflation-bar" style="height: 75%;"></div>
-                            <div class="inflation-bar" style="height: 70%;"></div>
-                            <div class="inflation-bar" style="height: 65%;"></div>
-                            <div class="inflation-bar" style="height: 60%;"></div>
-                            <div class="inflation-bar" style="height: 58%;"></div>
-                        </div>
-                        <div class="inflation-labels">
-                            <span>mai.</span><span>jun.</span><span>jul.</span><span>ago.</span><span>set.</span><span>out.</span><span>nov.</span><span>dez.</span>
-                        </div>
-                        <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border);">
-                            <div class="section-title">Taxa de juros do Brasil</div>
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <div>
-                                    <div style="font-size: 28px; font-weight: 700; margin-bottom: 4px;">14,5%</div>
-                                    <div style="font-size: 13px; color: var(--text-muted);">Real</div>
-                                </div>
-                                <div style="text-align: right;">
-                                    <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 4px;">Próximo
-                                        lançamento</div>
-                                    <div style="font-weight: 600;">17 de jun. de 2026</div>
-                                </div>
-                            </div>
+                        <div style="font-size: 28px; font-weight: 700; margin-bottom: 8px;" id="ipcaRate">-</div>
+                        <div style="color: var(--text-secondary); font-size: 13px;" id="ipcaDate">-</div>
+                        <div class="last-update"><i class="fas fa-clock"></i> <span id="ipcaUpdate">Aguardando...</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- TAB: Operações -->
+            <!-- ===== TAB: DIVIDENDOS ===== -->
+            <div class="tab-content" id="tab-dividendos">
+                <div class="grid grid-2">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title"><i class="fas fa-gift"></i> Próximos Dividendos</div>
+                            <button class="btn btn-secondary btn-sm" id="refreshDividends"><i class="fas fa-sync"></i>
+                                Atualizar</button>
+                        </div>
+                        <div id="upcomingDividends">
+                            <div class="dividend-card">
+                                <div class="dividend-header">
+                                    <div>
+                                        <strong style="color: var(--text-primary);">PETR4</strong>
+                                        <div style="font-size: 12px; color: var(--text-muted);">Petrobras PN</div>
+                                    </div>
+                                    <span class="badge badge-dividend">Ex-Div: 15/06</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div>
+                                        <div class="dividend-amount">R$ 1,24</div>
+                                        <div class="dividend-date">Pagamento: 30/06/2026</div>
+                                    </div>
+                                    <div class="dividend-yield">Yield: 3.2%</div>
+                                </div>
+                            </div>
+                            <div class="dividend-card">
+                                <div class="dividend-header">
+                                    <div>
+                                        <strong style="color: var(--text-primary);">VALE3</strong>
+                                        <div style="font-size: 12px; color: var(--text-muted);">Vale ON</div>
+                                    </div>
+                                    <span class="badge badge-dividend">Ex-Div: 20/06</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div>
+                                        <div class="dividend-amount">R$ 2,85</div>
+                                        <div class="dividend-date">Pagamento: 10/07/2026</div>
+                                    </div>
+                                    <div class="dividend-yield">Yield: 4.6%</div>
+                                </div>
+                            </div>
+                            <div class="dividend-card">
+                                <div class="dividend-header">
+                                    <div>
+                                        <strong style="color: var(--text-primary);">ITUB4</strong>
+                                        <div style="font-size: 12px; color: var(--text-muted);">Itaú Unibanco</div>
+                                    </div>
+                                    <span class="badge badge-dividend">Ex-Div: 25/06</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div>
+                                        <div class="dividend-amount">R$ 0,42</div>
+                                        <div class="dividend-date">Pagamento: 15/07/2026</div>
+                                    </div>
+                                    <div class="dividend-yield">Yield: 1.2%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title"><i class="fas fa-chart-line"></i> Histórico de Dividendos</div>
+                        </div>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Data</th>
+                                        <th>Ativo</th>
+                                        <th>Tipo</th>
+                                        <th>Valor</th>
+                                        <th>Yield</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="dividendHistoryBody">
+                                    <tr>
+                                        <td>15/05/2026</td>
+                                        <td><strong>PETR4</strong></td>
+                                        <td><span class="badge badge-dividend">Dividendo</span></td>
+                                        <td>R$ 1,18</td>
+                                        <td class="up">3.1%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>10/05/2026</td>
+                                        <td><strong>VALE3</strong></td>
+                                        <td><span class="badge badge-dividend">JCP</span></td>
+                                        <td>R$ 2,65</td>
+                                        <td class="up">4.3%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>05/04/2026</td>
+                                        <td><strong>ITUB4</strong></td>
+                                        <td><span class="badge badge-dividend">Dividendo</span></td>
+                                        <td>R$ 0,38</td>
+                                        <td class="up">1.1%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title"><i class="fas fa-chart-pie"></i> Yield por Ativo</div>
+                    </div>
+                    <div class="chart-container large"><canvas id="dividendYieldChart"></canvas></div>
+                </div>
+            </div>
+
+            <!-- ===== TAB: OPERAÇÕES ===== -->
             <div class="tab-content" id="tab-operacoes">
                 <div class="card">
                     <div class="section-title">Nova Operação</div>
                     <form id="operationForm">
                         <div class="form-grid">
-                            <div class="form-group"><label class="form-label">Tipo *</label><select class="form-select"
-                                    id="type" required>
+                            <div class="form-group">
+                                <label class="form-label">Tipo *</label>
+                                <select class="form-select" id="type" required>
                                     <option value="">Selecione...</option>
-                                    <option value="compra">Compra</option>
-                                    <option value="venda">Venda</option>
-                                </select></div>
-                            <div class="form-group"><label class="form-label">Ativo *</label><input type="text"
-                                    class="form-input" id="asset" placeholder="EX: AAPL, PETR4, BTC" required></div>
-                            <div class="form-group"><label class="form-label">Quantidade *</label><input type="number"
-                                    class="form-input" id="quantity" step="0.0001" min="0.0001" required></div>
-                            <div class="form-group"><label class="form-label">Preço Unitário (R$) *</label><input
-                                    type="number" class="form-input" id="price" step="0.01" min="0.01" required></div>
-                            <div class="form-group"><label class="form-label">Data *</label><input type="date"
-                                    class="form-input" id="date" required></div>
-                            <div class="form-group"><label class="form-label">Categoria *</label><select
-                                    class="form-select" id="category" required>
+                                    <option value="compra">✅ Compra</option>
+                                    <option value="venda">❌ Venda</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Ativo *</label>
+                                <input type="text" class="form-input" id="asset" placeholder="EX: AAPL, PETR4, BTC"
+                                    required pattern="[A-Za-z0-9\-]{2,10}" title="Use ticker válido">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Quantidade *</label>
+                                <input type="number" class="form-input" id="quantity" step="0.0001" min="0.0001"
+                                    required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Preço Unitário *</label>
+                                <input type="number" class="form-input" id="price" step="0.01" min="0.01" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Data *</label>
+                                <input type="date" class="form-input" id="date" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Categoria *</label>
+                                <select class="form-select" id="category" required>
                                     <option value="">Selecione...</option>
-                                    <option value="acoes_us">Ações EUA</option>
-                                    <option value="acoes_br">Ações Brasil</option>
-                                    <option value="acoes_eu">Ações Europa</option>
-                                    <option value="cripto">Criptomoedas</option>
-                                    <option value="etf">ETFs</option>
-                                </select></div>
+                                    <option value="acoes_us">🇺🇸 Ações EUA</option>
+                                    <option value="acoes_br">🇧🇷 Ações Brasil</option>
+                                    <option value="acoes_eu">🇪🇺 Ações Europa</option>
+                                    <option value="cripto">₿ Criptomoedas</option>
+                                    <option value="etf">📊 ETFs</option>
+                                    <option value="fiis">🏢 FIIs</option>
+                                </select>
+                            </div>
                         </div>
-                        <div class="form-group"><label class="form-label">Observações</label><textarea
-                                class="form-textarea" id="notes" rows="2"
-                                placeholder="Estratégia: DCA, Swing Trade, Buy & Hold..."></textarea></div>
-                        <div class="form-group"><strong style="font-size: 16px;">Total: <span id="totalValue"
-                                    style="color: #667eea;">R$ 0,00</span></strong></div>
+                        <div class="form-group">
+                            <label class="form-label">Observações</label>
+                            <textarea class="form-textarea" id="notes" rows="2"
+                                placeholder="Estratégia: DCA, Swing Trade, Buy & Hold..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <strong style="font-size: 16px;">Total: <span id="totalValue" style="color: #667eea;">R$
+                                    0,00</span></strong>
+                        </div>
                         <button type="submit" class="btn btn-primary" style="width: 100%;"><i class="fas fa-save"></i>
                             Adicionar Operação</button>
                     </form>
                 </div>
+
                 <div class="card" style="margin-top: 20px;">
                     <div
-                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
                         <div class="section-title" style="margin: 0;">Histórico de Operações</div>
-                        <span class="badge" style="background: #667eea; color: white;" id="recordCount">0
-                            registros</span>
+                        <span class="badge badge-primary" id="recordCount">0 registros</span>
                     </div>
                     <div class="filters">
-                        <div class="filter-group"><select class="form-select" id="filterType">
+                        <div class="filter-group">
+                            <select class="form-select" id="filterType">
                                 <option value="all">Todos os tipos</option>
                                 <option value="compra">Compras</option>
                                 <option value="venda">Vendas</option>
-                            </select></div>
-                        <div class="filter-group"><select class="form-select" id="filterCategory">
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <select class="form-select" id="filterCategory">
                                 <option value="all">Todas categorias</option>
-                                <option value="acoes_us">Ações EUA</option>
                                 <option value="acoes_br">Ações Brasil</option>
+                                <option value="acoes_us">Ações EUA</option>
                                 <option value="cripto">Cripto</option>
                                 <option value="etf">ETFs</option>
-                            </select></div>
-                        <div class="filter-group"><input type="text" class="form-input" id="filterAsset"
-                                placeholder="Buscar ativo..."></div>
-                        <div class="filter-group" style="display: flex; gap: 8px;"><button class="btn btn-primary"
-                                id="applyFilters">Aplicar</button><button class="btn btn-secondary"
-                                id="clearFilters">Limpar</button></div>
+                                <option value="fiis">FIIs</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <input type="text" class="form-input" id="filterAsset" placeholder="Buscar ativo...">
+                        </div>
+                        <div class="filter-group" style="display: flex; gap: 8px;">
+                            <button class="btn btn-primary" id="applyFilters">Aplicar</button>
+                            <button class="btn btn-secondary" id="clearFilters">Limpar</button>
+                        </div>
                     </div>
                     <div class="table-container">
                         <table>
@@ -1294,97 +1864,263 @@
                             <tbody id="operationsBody"></tbody>
                         </table>
                     </div>
-                    <div id="noOperations" class="empty-state" style="display: none;"><i class="fas fa-inbox"></i>
+                    <div id="noOperations" class="empty-state" style="display: none;">
+                        <i class="fas fa-inbox"></i>
                         <h3>Nenhuma operação registrada</h3>
                         <p>Comece adicionando sua primeira operação</p>
                     </div>
                 </div>
             </div>
 
-            <!-- TAB: Portfolio -->
+            <!-- ===== TAB: PORTFOLIO ===== -->
             <div class="tab-content" id="tab-portfolio">
+                <div class="grid grid-4">
+                    <div class="kpi-card">
+                        <div class="kpi-label">Valor Total</div>
+                        <div class="kpi-value" id="portfolioValue">R$ 0,00</div>
+                        <div class="kpi-sublabel">Investido: <span id="portfolioInvested">R$ 0,00</span></div>
+                    </div>
+                    <div class="kpi-card" id="plCard">
+                        <div class="kpi-label">Lucro/Prejuízo</div>
+                        <div class="kpi-value" id="portfolioPL">R$ 0,00</div>
+                        <div class="kpi-sublabel" id="portfolioPLPercent">0.00%</div>
+                    </div>
+                    <div class="kpi-card warning">
+                        <div class="kpi-label">Dividend Yield</div>
+                        <div class="kpi-value" id="portfolioYield">0.00%</div>
+                        <div class="kpi-sublabel">Média ponderada</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">Ativos</div>
+                        <div class="kpi-value" id="portfolioAssets">0</div>
+                        <div class="kpi-sublabel">Posições abertas</div>
+                    </div>
+                </div>
+
                 <div class="card">
-                    <div class="section-title">Portfólio por Ativo</div>
+                    <div class="card-header">
+                        <div class="card-title">Posições por Ativo</div>
+                        <button class="btn btn-secondary btn-sm" id="refreshPortfolio"><i class="fas fa-sync"></i>
+                            Atualizar Preços</button>
+                    </div>
                     <div class="table-container">
                         <table>
                             <thead>
                                 <tr>
                                     <th>Ativo</th>
                                     <th>Categoria</th>
-                                    <th>Compras</th>
-                                    <th>Vendas</th>
-                                    <th>Qtd. Líq</th>
-                                    <th>Valor Líq</th>
-                                    <th>Média</th>
+                                    <th>Qtd</th>
+                                    <th>Preço Médio</th>
+                                    <th>Preço Atual</th>
+                                    <th>Valor</th>
                                     <th>PL</th>
+                                    <th>PL %</th>
+                                    <th>Dividend Yield</th>
                                 </tr>
                             </thead>
-                            <tbody id="portfolioBody"></tbody>
+                            <tbody id="positionsBody"></tbody>
                         </table>
                     </div>
-                    <div id="noPortfolio" class="empty-state" style="display: none;"><i class="fas fa-briefcase"></i>
+                    <div id="noPositions" class="empty-state" style="display: none;">
+                        <i class="fas fa-briefcase"></i>
                         <h3>Portfólio vazio</h3>
                         <p>Adicione operações para visualizar</p>
                     </div>
                 </div>
             </div>
 
-            <!-- TAB: Análise -->
+            <!-- ===== TAB: ANÁLISE ===== -->
             <div class="tab-content" id="tab-analise">
                 <div class="card">
                     <div class="section-title">Análise de Performance</div>
                     <div class="form-grid" style="margin-bottom: 20px;">
-                        <div class="form-group"><label class="form-label">Período</label><select class="form-select"
-                                id="analysisPeriod">
+                        <div class="form-group">
+                            <label class="form-label">Período</label>
+                            <select class="form-select" id="analysisPeriod">
                                 <option value="30">Últimos 30 dias</option>
                                 <option value="90">Últimos 90 dias</option>
                                 <option value="180">Últimos 6 meses</option>
                                 <option value="365">Último ano</option>
                                 <option value="all">Todo o período</option>
-                            </select></div>
-                        <div class="form-group"><label class="form-label">Métrica</label><select class="form-select"
-                                id="analysisMetric">
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Métrica</label>
+                            <select class="form-select" id="analysisMetric">
                                 <option value="pl">Lucro/Prejuízo</option>
                                 <option value="volume">Volume Negociado</option>
-                                <option value="frequency">Frequência de Operações</option>
-                            </select></div>
+                                <option value="dividends">Dividendos</option>
+                                <option value="frequency">Frequência</option>
+                            </select>
+                        </div>
                     </div>
                     <button class="btn btn-primary" id="generateAnalysis"><i class="fas fa-calculator"></i> Gerar
                         Análise</button>
                     <div id="analysisResult" style="margin-top: 20px;"></div>
                 </div>
+
+                <div class="grid grid-2">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title"><i class="fas fa-chart-area"></i> Evolução do Patrimônio</div>
+                        </div>
+                        <div class="chart-container large"><canvas id="equityChart"></canvas></div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title"><i class="fas fa-chart-bar"></i> Dividendos por Mês</div>
+                        </div>
+                        <div class="chart-container large"><canvas id="dividendMonthlyChart"></canvas></div>
+                    </div>
+                </div>
             </div>
 
-            <!-- TAB: Configurações -->
+            <!-- ===== TAB: CONFIGURAÇÕES ===== -->
             <div class="tab-content" id="tab-configuracoes">
                 <div class="card">
-                    <div class="section-title">Configurações</div>
-                    <div class="form-grid">
-                        <div class="form-group"><label class="form-label">Moeda de Exibição</label><select
-                                class="form-select" id="currencySetting">
-                                <option value="BRL">Real Brasileiro (R$)</option>
-                                <option value="USD">Dólar Americano ($)</option>
-                                <option value="EUR">Euro (€)</option>
-                            </select></div>
-                        <div class="form-group"><label class="form-label">Tema da Interface</label><select
-                                class="form-select" id="themeSetting">
-                                <option value="light">Claro</option>
-                                <option value="dark">Escuro</option>
-                            </select></div>
-                        <div class="form-group"><label class="form-label">Atualização Automática</label><select
-                                class="form-select" id="autoUpdateSetting">
-                                <option value="10">A cada 10 segundos</option>
-                                <option value="30" selected>A cada 30 segundos</option>
-                                <option value="60">A cada 1 minuto</option>
-                                <option value="0">Desativado</option>
-                            </select></div>
+                    <div class="section-title">⚙️ Configurações de API</div>
+
+                    <div class="form-group">
+                        <label class="form-label">🇧🇷 BrAPI Token (Dados Brasil)</label>
+                        <div class="api-key-input">
+                            <input type="password" class="form-input" id="brapiToken" placeholder="Sua token do BrAPI"
+                                value="hTS3Ppdkez3ErQJhwvC31t">
+                            <button type="button" class="api-key-toggle" onclick="toggleKeyVisibility('brapiToken')"><i
+                                    class="fas fa-eye"></i></button>
+                        </div>
+                        <div class="form-hint">
+                            <i class="fas fa-info-circle"></i> Obtenha em: <a href="https://brapi.dev/docs"
+                                target="_blank" class="link">brapi.dev/docs</a>
+                        </div>
                     </div>
-                    <div style="display: flex; gap: 12px; margin-top: 24px;">
-                        <button id="saveSettings" class="btn btn-primary" style="flex: 1;"><i class="fas fa-save"></i>
-                            Salvar Configurações</button>
-                        <button id="resetData" class="btn btn-secondary"
-                            style="flex: 1; background: var(--down-bg); color: var(--down); border-color: var(--down);"><i
-                                class="fas fa-trash"></i> Limpar Dados</button>
+
+                    <div class="form-group">
+                        <label class="form-label">🌍 Alpha Vantage API Key (Dados Globais)</label>
+                        <div class="api-key-input">
+                            <input type="password" class="form-input" id="alphaVantageKey" placeholder="Sua API key"
+                                value="BCQ49MTFDFT6NYG0">
+                            <button type="button" class="api-key-toggle"
+                                onclick="toggleKeyVisibility('alphaVantageKey')"><i class="fas fa-eye"></i></button>
+                        </div>
+                        <div class="form-hint">
+                            <i class="fas fa-info-circle"></i> Obtenha em: <a
+                                href="https://www.alphavantage.co/support/#api-key" target="_blank"
+                                class="link">alphavantage.co</a> • Limite: 5 chamadas/min (free)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">📊 Finnhub API Key (Ações & Dividendos)</label>
+                        <div class="api-key-input">
+                            <input type="password" class="form-input" id="finnhubKey" placeholder="Sua API key"
+                                value="d8dht49r01qhm4aeru0gd8dht49r01qhm4aeru10">
+                            <button type="button" class="api-key-toggle" onclick="toggleKeyVisibility('finnhubKey')"><i
+                                    class="fas fa-eye"></i></button>
+                        </div>
+                        <div class="form-hint">
+                            <i class="fas fa-info-circle"></i> Obtenha em: <a href="https://finnhub.io/register"
+                                target="_blank" class="link">finnhub.io/register</a> • Limite: 30 chamadas/min (free)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">☁️ FMP Cloud API Key (Dados Financeiros)</label>
+                        <div class="api-key-input">
+                            <input type="password" class="form-input" id="fmpKey" placeholder="Sua API key"
+                                value="MinhaApiKey">
+                            <button type="button" class="api-key-toggle" onclick="toggleKeyVisibility('fmpKey')"><i
+                                    class="fas fa-eye"></i></button>
+                        </div>
+                        <div class="form-hint">
+                            <i class="fas fa-info-circle"></i> Obtenha em: <a href="https://fmpcloud.io/register"
+                                target="_blank" class="link">fmpcloud.io</a> • Limite: 250 chamadas/dia (free)
+                        </div>
+                    </div>
+
+                    <div
+                        style="background: var(--bg-primary); padding: 12px; border-radius: 8px; margin: 16px 0; border-left: 3px solid var(--warning);">
+                        <strong style="color: var(--warning);"><i class="fas fa-exclamation-triangle"></i>
+                            Importante:</strong>
+                        <p style="font-size: 13px; margin: 8px 0 0; color: var(--text-secondary);">
+                            Suas API keys são armazenadas apenas no seu navegador (localStorage).
+                            Nunca compartilhe este arquivo HTML com outras pessoas sem antes limpar suas keys.
+                        </p>
+                    </div>
+
+                    <div class="form-grid" style="margin-top: 24px;">
+                        <div class="form-group">
+                            <label class="form-label">Moeda de Exibição</label>
+                            <select class="form-select" id="currencySetting">
+                                <option value="BRL">🇧🇷 Real Brasileiro (R$)</option>
+                                <option value="USD">🇺🇸 Dólar Americano ($)</option>
+                                <option value="EUR">🇪🇺 Euro (€)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Tema da Interface</label>
+                            <select class="form-select" id="themeSetting">
+                                <option value="light">☀️ Claro</option>
+                                <option value="dark">🌙 Escuro</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Atualização Automática</label>
+                            <select class="form-select" id="refreshInterval">
+                                <option value="0">❌ Desativado</option>
+                                <option value="60000">⏱️ 1 minuto</option>
+                                <option value="300000" selected>⏱️ 5 minutos</option>
+                                <option value="900000">⏱️ 15 minutos</option>
+                                <option value="1800000">⏱️ 30 minutos</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Cache de Dados</label>
+                            <select class="form-select" id="cacheTtl">
+                                <option value="30000">30 segundos</option>
+                                <option value="60000" selected>1 minuto</option>
+                                <option value="300000">5 minutos</option>
+                                <option value="900000">15 minutos</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 12px; margin-top: 24px; flex-wrap: wrap;">
+                        <button id="saveSettings" class="btn btn-primary" style="flex: 1; min-width: 200px;">
+                            <i class="fas fa-save"></i> Salvar Configurações
+                        </button>
+                        <button id="testConnections" class="btn btn-secondary" style="flex: 1; min-width: 200px;">
+                            <i class="fas fa-plug"></i> Testar Conexões
+                        </button>
+                        <button id="resetData" class="btn btn-warning" style="flex: 1; min-width: 200px;">
+                            <i class="fas fa-trash"></i> Limpar Dados
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top: 20px;">
+                    <div class="section-title">📋 Informações do Sistema</div>
+                    <div class="stat-row">
+                        <span class="stat-label">Versão</span>
+                        <span class="stat-value">2.0.0 Professional</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">APIs Configuradas</span>
+                        <span class="stat-value" id="apiCount">4/4</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Última Atualização</span>
+                        <span class="stat-value" id="lastSync">-</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Operações Salvas</span>
+                        <span class="stat-value" id="savedOpsCount">0</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Espaço Utilizado</span>
+                        <span class="stat-value" id="storageUsed">0 KB</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="storageProgress" style="width: 0%"></div>
                     </div>
                 </div>
             </div>
@@ -1392,6 +2128,8 @@
     </main>
 
     <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Modal Confirmar -->
     <div id="confirmModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -1405,219 +2143,1480 @@
         </div>
     </div>
 
-    <script>
-        const AppConfig = { storageKey: 'finpro_v3', settingsKey: 'finpro_settings_v3', autoSave: 30000 };
-        const AppState = { operations: [], settings: { currency: 'BRL', theme: 'light', autoUpdate: 30 }, charts: {}, filters: { type: 'all', category: 'all', asset: '' }, updateInterval: null };
+    <!-- Modal Adicionar Watchlist -->
+    <div id="watchlistModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Adicionar à Watchlist</h3><button class="btn-close" onclick="closeWatchlistModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Símbolo do Ativo</label>
+                    <input type="text" class="form-input" id="wlSymbol" placeholder="EX: PETR4, AAPL, BTC">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Nome (opcional)</label>
+                    <input type="text" class="form-input" id="wlName" placeholder="Nome do ativo">
+                </div>
+                <button class="btn btn-primary" onclick="addToWatchlistFromModal()" style="width: 100%;">
+                    <i class="fas fa-plus"></i> Adicionar
+                </button>
+            </div>
+        </div>
+    </div>
 
+    <script>
+        // ===== CONFIGURAÇÃO DAS APIS =====
+        const APIConfig = {
+            brapi: {
+                base: 'https://brapi.dev/api',
+                token: 'hTS3Ppdkez3ErQJhwvC31t', // ← SUA KEY AQUI
+                timeout: 15000
+            },
+            alphaVantage: {
+                base: 'https://www.alphavantage.co/query',
+                key: 'BCQ49MTFDFT6NYG0', // ← SUA KEY AQUI
+                timeout: 15000
+            },
+            finnhub: {
+                base: 'https://finnhub.io/api/v1',
+                key: 'd8dht49r01qhm4aeru0gd8dht49r01qhm4aeru10', // ← SUA KEY AQUI
+                timeout: 15000
+            },
+            fmp: {
+                base: 'https://fmpcloud.io/api/v4',
+                key: 'MinhaApiKey', // ← SUA KEY AQUI
+                timeout: 15000
+            },
+            bcb: {
+                base: 'https://api.bcb.gov.br/dados/serie/bcdata.sgs',
+                timeout: 15000
+            },
+            coingecko: {
+                base: 'https://api.coingecko.com/api/v3',
+                timeout: 15000
+            }
+        };
+
+        // ===== CACHE SYSTEM =====
+        const Cache = {
+            data: {},
+            ttl: 60000, // 1 minuto padrão
+
+            get(key) {
+                const item = this.data[key];
+                if (!item) return null;
+                if (Date.now() - item.timestamp > this.ttl) {
+                    delete this.data[key];
+                    return null;
+                }
+                return item.value;
+            },
+
+            set(key, value, customTtl) {
+                this.data[key] = {
+                    value,
+                    timestamp: Date.now(),
+                    ttl: customTtl || this.ttl
+                };
+            },
+
+            clear() { this.data = {}; },
+            setTTL(ttl) { this.ttl = ttl; }
+        };
+
+        // ===== API SERVICE =====
+        const API = {
+            async fetch(url, options = {}) {
+                const controller = new AbortController();
+                const timeout = setTimeout(() => controller.abort(), options.timeout || 15000);
+
+                try {
+                    const response = await fetch(url, { ...options, signal: controller.signal });
+                    clearTimeout(timeout);
+
+                    if (!response.ok) {
+                        if (response.status === 429) throw new Error('Rate limit excedido');
+                        if (response.status === 401) throw new Error('API key inválida');
+                        throw new Error(`HTTP ${response.status}`);
+                    }
+                    return await response.json();
+                } catch (error) {
+                    clearTimeout(timeout);
+                    if (error.name === 'AbortError') throw new Error('Timeout na requisição');
+                    throw error;
+                }
+            },
+
+            // ===== BRAPI (Brasil) =====
+            async getQuoteBrAPI(symbol, token = null) {
+                const key = `brapi_${symbol}`;
+                const cached = Cache.get(key);
+                if (cached) return cached;
+
+                const t = token || APIConfig.brapi.token || 'demo';
+                try {
+                    const data = await this.fetch(`${APIConfig.brapi.base}/quote/${symbol}?token=${t}`);
+                    if (data && data.results && data.results[0]) {
+                        const r = data.results[0];
+                        const result = {
+                            symbol: r.symbol,
+                            name: r.companyName || r.longName,
+                            price: r.regularMarketPrice,
+                            change: r.regularMarketChangePercent,
+                            changeValue: r.regularMarketChange,
+                            volume: r.regularMarketVolume,
+                            marketCap: r.marketCap,
+                            timestamp: new Date().toISOString()
+                        };
+                        Cache.set(key, result);
+                        return result;
+                    }
+                } catch (e) { console.warn('BrAPI error:', e); }
+                return null;
+            },
+
+            async getDividendsBrAPI(symbol, token = null) {
+                const key = `brapi_div_${symbol}`;
+                const cached = Cache.get(key);
+                if (cached) return cached;
+
+                const t = token || APIConfig.brapi.token || 'demo';
+                try {
+                    const data = await this.fetch(`${APIConfig.brapi.base}/quote/${symbol}/dividends?token=${t}`);
+                    if (data && data.dividends) {
+                        const result = data.dividends.map(d => ({
+                            date: d.paymentDate || d.exDate,
+                            type: d.type || 'Dividendo',
+                            value: d.value,
+                            yield: d.yield
+                        })).sort((a, b) => new Date(b.date) - new Date(a.date));
+                        Cache.set(key, result, 300000); // 5 min cache
+                        return result;
+                    }
+                } catch (e) { console.warn('BrAPI dividends error:', e); }
+                return [];
+            },
+
+            // ===== ALPHA VANTAGE =====
+            async getQuoteAV(symbol, key = null) {
+                const cacheKey = `av_${symbol}`;
+                const cached = Cache.get(cacheKey);
+                if (cached) return cached;
+
+                const k = key || APIConfig.alphaVantage.key;
+                if (!k) return null;
+
+                try {
+                    // Determinar função baseada no símbolo
+                    let func = 'GLOBAL_QUOTE';
+                    if (symbol.includes('.SA')) func = 'GLOBAL_QUOTE';
+
+                    const data = await this.fetch(`${APIConfig.alphaVantage.base}?function=${func}&symbol=${symbol}&apikey=${k}`);
+
+                    if (data && data['Global Quote']) {
+                        const q = data['Global Quote'];
+                        const result = {
+                            symbol: q['01. symbol'],
+                            price: parseFloat(q['05. price']),
+                            change: parseFloat(q['10. change percent'].replace('%', '')),
+                            changeValue: parseFloat(q['09. change']),
+                            volume: parseInt(q['06. volume']),
+                            timestamp: new Date().toISOString()
+                        };
+                        Cache.set(cacheKey, result);
+                        return result;
+                    }
+                } catch (e) { console.warn('AlphaVantage error:', e); }
+                return null;
+            },
+
+            async getTimeSeriesAV(symbol, key = null, interval = 'daily') {
+                const k = key || APIConfig.alphaVantage.key;
+                if (!k) return null;
+
+                try {
+                    const func = interval === 'intraday' ? 'TIME_SERIES_INTRADAY' : 'TIME_SERIES_DAILY';
+                    const url = `${APIConfig.alphaVantage.base}?function=${func}&symbol=${symbol}&apikey=${k}${interval === 'intraday' ? '&interval=60min' : ''}`;
+                    const data = await this.fetch(url);
+
+                    const timeKey = Object.keys(data).find(k => k.includes('Time Series'));
+                    if (timeKey && data[timeKey]) {
+                        return Object.entries(data[timeKey]).slice(0, 30).map(([date, values]) => ({
+                            date,
+                            close: parseFloat(values['4. close'])
+                        })).reverse();
+                    }
+                } catch (e) { console.warn('AV time series error:', e); }
+                return null;
+            },
+
+            // ===== FINNHUB =====
+            async getQuoteFinnhub(symbol, key = null) {
+                const cacheKey = `fh_${symbol}`;
+                const cached = Cache.get(cacheKey);
+                if (cached) return cached;
+
+                const k = key || APIConfig.finnhub.key;
+                if (!k) return null;
+
+                try {
+                    const data = await this.fetch(`${APIConfig.finnhub.base}/quote?symbol=${symbol}&token=${k}`);
+                    if (data && data.c !== null) {
+                        const result = {
+                            symbol,
+                            price: data.c,
+                            change: data.dp,
+                            changeValue: data.d,
+                            high: data.h,
+                            low: data.l,
+                            open: data.o,
+                            timestamp: new Date().toISOString()
+                        };
+                        Cache.set(cacheKey, result);
+                        return result;
+                    }
+                } catch (e) { console.warn('Finnhub error:', e); }
+                return null;
+            },
+
+            async getDividendsFinnhub(symbol, key = null) {
+                const cacheKey = `fh_div_${symbol}`;
+                const cached = Cache.get(cacheKey);
+                if (cached) return cached;
+
+                const k = key || APIConfig.finnhub.key;
+                if (!k) return [];
+
+                try {
+                    const now = new Date();
+                    const from = new Date(now.getFullYear() - 2, 0, 1).toISOString().split('T')[0];
+                    const to = now.toISOString().split('T')[0];
+
+                    const data = await this.fetch(`${APIConfig.finnhub.base}/stock/dividend?symbol=${symbol}&from=${from}&to=${to}&token=${k}`);
+
+                    if (data && Array.isArray(data)) {
+                        const result = data.map(d => ({
+                            date: d.paymentDate || d.date,
+                            type: 'Dividendo',
+                            value: d.amount || d.value,
+                            yield: d.yield
+                        })).sort((a, b) => new Date(b.date) - new Date(a.date));
+                        Cache.set(cacheKey, result, 300000);
+                        return result;
+                    }
+                } catch (e) { console.warn('Finnhub dividends error:', e); }
+                return [];
+            },
+
+            async getCompanyProfileFinnhub(symbol, key = null) {
+                const k = key || APIConfig.finnhub.key;
+                if (!k) return null;
+
+                try {
+                    const data = await this.fetch(`${APIConfig.finnhub.base}/stock/profile2?symbol=${symbol}&token=${k}`);
+                    if (data && data.name) {
+                        return {
+                            name: data.name,
+                            sector: data.finnhubIndustry,
+                            country: data.country,
+                            marketCap: data.marketCapitalization,
+                            peRatio: data.peerComparison?.peRatio
+                        };
+                    }
+                } catch (e) { console.warn('Finnhub profile error:', e); }
+                return null;
+            },
+
+            // ===== FMP CLOUD =====
+            async getQuoteFMP(symbol, key = null) {
+                const cacheKey = `fmp_${symbol}`;
+                const cached = Cache.get(cacheKey);
+                if (cached) return cached;
+
+                const k = key || APIConfig.fmp.key;
+                if (!k) return null;
+
+                try {
+                    const data = await this.fetch(`${APIConfig.fmp.base}/quote/${symbol}?apikey=${k}`);
+                    if (data && data[0]) {
+                        const r = data[0];
+                        const result = {
+                            symbol: r.symbol,
+                            name: r.name,
+                            price: r.price,
+                            change: r.changesPercentage,
+                            changeValue: r.changes,
+                            volume: r.volume,
+                            marketCap: r.marketCap,
+                            pe: r.pe,
+                            timestamp: new Date().toISOString()
+                        };
+                        Cache.set(cacheKey, result);
+                        return result;
+                    }
+                } catch (e) { console.warn('FMP error:', e); }
+                return null;
+            },
+
+            async getDividendsFMP(symbol, key = null) {
+                const cacheKey = `fmp_div_${symbol}`;
+                const cached = Cache.get(cacheKey);
+                if (cached) return cached;
+
+                const k = key || APIConfig.fmp.key;
+                if (!k) return [];
+
+                try {
+                    const data = await this.fetch(`${APIConfig.fmp.base}/historical-price-full/stock_dividend/${symbol}?apikey=${k}`);
+                    if (data && data.historical) {
+                        const result = data.historical.map(d => ({
+                            date: d.date,
+                            type: 'Dividendo',
+                            value: d.dividend,
+                            yield: d.dividendYield
+                        })).sort((a, b) => new Date(b.date) - new Date(a.date));
+                        Cache.set(cacheKey, result, 300000);
+                        return result;
+                    }
+                } catch (e) { console.warn('FMP dividends error:', e); }
+                return [];
+            },
+
+            // ===== BANCO CENTRAL =====
+            async getSELIC() {
+                const cached = Cache.get('bcb_selic');
+                if (cached) return cached;
+
+                try {
+                    const data = await this.fetch(`${APIConfig.bcb.base}1178/dados/ultimos/1?formato=json`);
+                    if (data && data[0]) {
+                        const result = {
+                            rate: parseFloat(data[0].valor),
+                            date: new Date(data[0].data).toLocaleDateString('pt-BR'),
+                            timestamp: new Date().toISOString()
+                        };
+                        Cache.set('bcb_selic', result, 3600000); // 1 hora
+                        return result;
+                    }
+                } catch (e) { console.warn('BCB SELIC error:', e); }
+                return null;
+            },
+
+            async getIPCA() {
+                const cached = Cache.get('bcb_ipca');
+                if (cached) return cached;
+
+                try {
+                    const data = await this.fetch(`${APIConfig.bcb.base}433/dados/ultimos/1?formato=json`);
+                    if (data && data[0]) {
+                        const result = {
+                            rate: parseFloat(data[0].valor),
+                            date: new Date(data[0].data).toLocaleDateString('pt-BR'),
+                            timestamp: new Date().toISOString()
+                        };
+                        Cache.set('bcb_ipca', result, 3600000);
+                        return result;
+                    }
+                } catch (e) { console.warn('BCB IPCA error:', e); }
+                return null;
+            },
+
+            // ===== COINGECKO (Cripto) =====
+            async getCryptoPrices() {
+                const cached = Cache.get('crypto_prices');
+                if (cached) return cached;
+
+                try {
+                    const ids = 'bitcoin,ethereum,cardano,solana,polkadot,dogecoin';
+                    const data = await this.fetch(`${APIConfig.coingecko.base}/simple/price?ids=${ids}&vs_currencies=usd,brl&include_24hr_change=true&include_market_cap=true`);
+
+                    if (data) {
+                        const result = {
+                            btc: { price: data.bitcoin.usd, change: data.bitcoin.usd_24h_change, marketCap: data.bitcoin.usd_market_cap },
+                            eth: { price: data.ethereum.usd, change: data.ethereum.usd_24h_change, marketCap: data.ethereum.usd_market_cap },
+                            totalMarketCap: Object.values(data).reduce((s, c) => s + (c.usd_market_cap || 0), 0),
+                            timestamp: new Date().toISOString()
+                        };
+                        Cache.set('crypto_prices', result);
+                        return result;
+                    }
+                } catch (e) { console.warn('CoinGecko error:', e); }
+                return null;
+            }
+        };
+
+        // ===== APP STATE =====
+        const AppState = {
+            operations: [],
+            settings: {
+                currency: 'BRL',
+                theme: 'light',
+                refreshInterval: 300000,
+                cacheTtl: 60000,
+                apiKeys: {
+                    brapi: 'MinhaApiKey',
+                    alphaVantage: 'MinhaApiKey',
+                    finnhub: 'MinhaApiKey',
+                    fmp: 'MinhaApiKey'
+                }
+            },
+            charts: {},
+            filters: { type: 'all', category: 'all', asset: '' },
+            watchlist: ['PETR4', 'VALE3', 'AAPL', 'BTC-USD'],
+            updateInterval: null,
+            marketData: {},
+            lastSync: null
+        };
+
+        // ===== UTILS =====
         const Utils = {
             id: () => Date.now().toString(36) + Math.random().toString(36).substr(2),
-            money: (v, c = 'BRL') => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: c }).format(v),
+
+            money: (v, c = 'BRL') => {
+                if (v === null || v === undefined) return '-';
+                return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: c }).format(v);
+            },
+
+            pct: (v) => v !== null && v !== undefined ? `${v >= 0 ? '+' : ''}${v.toFixed(2)}%` : '-',
+
             date: (d) => d ? d.split('-').reverse().join('/') : '-',
-            cat: (c) => ({ acoes_us: '🇺🇸 EUA', acoes_br: '🇧🇷 Brasil', acoes_eu: '🇪🇺 Europa', cripto: '₿ Cripto', etf: '📊 ETF' }[c] || c),
+
+            cat: (c) => ({
+                acoes_us: '🇺🇸 EUA', acoes_br: '🇧🇷 Brasil', acoes_eu: '🇪🇺 Europa',
+                cripto: '₿ Cripto', etf: '📊 ETF', fiis: '🏢 FIIs'
+            }[c] || c),
+
             toast: (m, t = 'info', d = 3000) => {
                 const c = document.getElementById('toastContainer'), e = document.createElement('div');
-                e.className = `toast ${t}`; e.innerHTML = `<i class="fas fa-${t === 'success' ? 'check-circle' : t === 'error' ? 'exclamation-circle' : 'info-circle'}"></i><span>${m}</span>`;
-                c.appendChild(e); setTimeout(() => { e.style.opacity = '0'; e.style.transform = 'translateX(100%)'; setTimeout(() => e.remove(), 300); }, d);
+                e.className = `toast ${t}`;
+                e.innerHTML = `<i class="fas fa-${t === 'success' ? 'check-circle' : t === 'error' ? 'exclamation-circle' : t === 'warning' ? 'exclamation-triangle' : 'info-circle'}"></i><span>${m}</span>`;
+                c.appendChild(e);
+                setTimeout(() => { e.style.opacity = '0'; e.style.transform = 'translateX(100%)'; setTimeout(() => e.remove(), 300); }, d);
             },
+
             confirm: (m) => new Promise(r => {
-                document.getElementById('modalMessage').textContent = m; document.getElementById('confirmModal').classList.add('active');
-                const c = () => { document.getElementById('confirmAction').onclick = null; document.getElementById('cancelAction').onclick = null; document.getElementById('modalClose').onclick = null; };
+                document.getElementById('modalMessage').textContent = m;
+                document.getElementById('confirmModal').classList.add('active');
+                const c = () => {
+                    document.getElementById('confirmAction').onclick = null;
+                    document.getElementById('cancelAction').onclick = null;
+                    document.getElementById('modalClose').onclick = null;
+                };
                 document.getElementById('confirmAction').onclick = () => { c(); r(true); };
                 document.getElementById('cancelAction').onclick = () => { c(); r(false); };
                 document.getElementById('modalClose').onclick = () => { c(); r(false); };
-            })
+            }),
+
+            setLoading: (id, loading) => {
+                const card = document.getElementById(id);
+                if (card) card.classList.toggle('loading', loading);
+            },
+
+            updateStatus: (status) => {
+                const dot = document.getElementById('statusDot');
+                const text = document.getElementById('statusText');
+                if (status === 'connected') { dot.className = 'status-dot'; text.textContent = 'Conectado'; }
+                else if (status === 'error') { dot.className = 'status-dot error'; text.textContent = 'Erro API'; }
+                else if (status === 'loading') { dot.className = 'status-dot loading'; text.textContent = 'Carregando...'; }
+            },
+
+            formatLargeNumber: (n) => {
+                if (n >= 1e12) return (n / 1e12).toFixed(2) + 'T';
+                if (n >= 1e9) return (n / 1e9).toFixed(2) + 'B';
+                if (n >= 1e6) return (n / 1e6).toFixed(2) + 'M';
+                if (n >= 1e3) return (n / 1e3).toFixed(2) + 'K';
+                return n.toFixed(2);
+            }
         };
 
+        // ===== STORAGE =====
         const Storage = {
             load: () => {
                 try {
-                    const s = localStorage.getItem(AppConfig.storageKey); if (s) AppState.operations = JSON.parse(s);
-                    const st = localStorage.getItem(AppConfig.settingsKey); if (st) { AppState.settings = { ...AppState.settings, ...JSON.parse(st) }; Storage.apply(); }
-                } catch (e) { }
+                    const s = localStorage.getItem('finpro_v5');
+                    if (s) AppState.operations = JSON.parse(s);
+
+                    const st = localStorage.getItem('finpro_settings_v5');
+                    if (st) {
+                        const settings = JSON.parse(st);
+                        AppState.settings = { ...AppState.settings, ...settings };
+                        if (settings.apiKeys) {
+                            Object.entries(settings.apiKeys).forEach(([k, v]) => {
+                                if (APIConfig[k]) APIConfig[k].key = v;
+                                if (k === 'brapi') APIConfig.brapi.token = v;
+                            });
+                        }
+                    }
+                    Cache.setTTL(AppState.settings.cacheTtl);
+                    Storage.apply();
+                } catch (e) { console.error('Load error:', e); }
             },
-            save: () => localStorage.setItem(AppConfig.storageKey, JSON.stringify(AppState.operations)),
-            saveSettings: () => { localStorage.setItem(AppConfig.settingsKey, JSON.stringify(AppState.settings)); Storage.apply(); },
+
+            save: () => {
+                try { localStorage.setItem('finpro_v5', JSON.stringify(AppState.operations)); }
+                catch (e) { console.error('Save error:', e); }
+            },
+
+            saveSettings: () => {
+                try {
+                    localStorage.setItem('finpro_settings_v5', JSON.stringify(AppState.settings));
+                    Storage.apply();
+                } catch (e) { console.error('Settings save error:', e); }
+            },
+
             apply: () => {
                 document.documentElement.setAttribute('data-theme', AppState.settings.theme);
                 document.getElementById('themeSetting').value = AppState.settings.theme;
                 document.getElementById('currencySetting').value = AppState.settings.currency;
-                document.getElementById('autoUpdateSetting').value = AppState.settings.autoUpdate;
+                document.getElementById('refreshInterval').value = AppState.settings.refreshInterval;
+                document.getElementById('cacheTtl').value = AppState.settings.cacheTtl;
+
+                // API Keys
+                document.getElementById('brapiToken').value = AppState.settings.apiKeys.brapi || '';
+                document.getElementById('alphaVantageKey').value = AppState.settings.apiKeys.alphaVantage || '';
+                document.getElementById('finnhubKey').value = AppState.settings.apiKeys.finnhub || '';
+                document.getElementById('fmpKey').value = AppState.settings.apiKeys.fmp || '';
+
                 Storage.autoUpdate();
+                App.updateStorageInfo();
             },
+
             autoUpdate: () => {
                 if (AppState.updateInterval) clearInterval(AppState.updateInterval);
-                const i = parseInt(AppState.settings.autoUpdate); if (i > 0) AppState.updateInterval = setInterval(() => {
-                    if (document.getElementById('tab-dashboard').classList.contains('active')) Dashboard.update();
-                }, i * 1000);
+                const i = parseInt(AppState.settings.refreshInterval);
+                if (i > 0) {
+                    AppState.updateInterval = setInterval(() => {
+                        if (document.getElementById('tab-mercado')?.classList.contains('active')) {
+                            MarketData.refresh();
+                        }
+                    }, i);
+                }
+            },
+
+            updateStorageInfo: () => {
+                try {
+                    let total = 0;
+                    for (let key in localStorage) {
+                        if (localStorage.hasOwnProperty(key)) {
+                            total += localStorage[key].length * 2;
+                        }
+                    }
+                    const used = (total / 1024).toFixed(1);
+                    const percent = Math.min((total / (5 * 1024 * 1024)) * 100, 100);
+
+                    document.getElementById('storageUsed').textContent = `${used} KB`;
+                    document.getElementById('storageProgress').style.width = `${percent}%`;
+                    document.getElementById('savedOpsCount').textContent = AppState.operations.length;
+                    document.getElementById('lastSync').textContent = AppState.lastSync ?
+                        new Date(AppState.lastSync).toLocaleTimeString('pt-BR') : 'Nunca';
+                } catch (e) { }
             }
         };
 
+        // ===== MARKET DATA =====
+        const MarketData = {
+            async refresh() {
+                Utils.updateStatus('loading');
+                let errors = 0;
+
+                // IBOV via BrAPI
+                Utils.setLoading('cardIbov', true);
+                const ibov = await API.getQuoteBrAPI('^IBOV');
+                if (ibov) {
+                    document.getElementById('ibovPrice').textContent = Utils.money(ibov.price);
+                    const ch = document.getElementById('ibovChange');
+                    ch.className = `change ${ibov.change >= 0 ? 'up' : 'down'}`;
+                    ch.innerHTML = `<i class="fas fa-${ibov.change >= 0 ? 'arrow-up' : 'arrow-down'}"></i> ${Utils.pct(ibov.change)}`;
+                    document.getElementById('ibovUpdate').textContent = new Date(ibov.timestamp).toLocaleTimeString('pt-BR');
+                } else errors++;
+                Utils.setLoading('cardIbov', false);
+
+                // Índices via Alpha Vantage
+                Utils.setLoading('cardIndices', true);
+                const indices = await this.getIndices();
+                if (indices.length > 0) {
+                    document.getElementById('indicesList').innerHTML = indices.map(idx => `
+                        <div class="index-item">
+                            <div class="index-info">
+                                <div class="index-icon" style="background: ${idx.change >= 0 ? '#10b981' : '#ef4444'}">${idx.symbol.slice(0, 2)}</div>
+                                <div><div class="index-name">${idx.name}</div><div class="index-symbol">${idx.symbol}</div></div>
+                            </div>
+                            <div class="index-value">
+                                <div class="index-price">${idx.price >= 1000 ? Utils.formatLargeNumber(idx.price) : idx.price.toFixed(2)}</div>
+                                <div class="index-change ${idx.change >= 0 ? 'up' : 'down'}">${Utils.pct(idx.change)}</div>
+                            </div>
+                        </div>
+                    `).join('');
+                    document.getElementById('indicesUpdate').textContent = new Date().toLocaleTimeString('pt-BR');
+                }
+                Utils.setLoading('cardIndices', false);
+
+                // Crypto via CoinGecko
+                Utils.setLoading('cardCrypto', true);
+                const crypto = await API.getCryptoPrices();
+                if (crypto) {
+                    document.getElementById('btcPrice').textContent = `$${crypto.btc.price.toLocaleString('en-US')}`;
+                    document.getElementById('btcChange').textContent = Utils.pct(crypto.btc.change);
+                    document.getElementById('btcChange').className = `commodity-change ${crypto.btc.change >= 0 ? 'up' : 'down'}`;
+                    document.getElementById('ethPrice').textContent = `$${crypto.eth.price.toLocaleString('en-US')}`;
+                    document.getElementById('ethChange').textContent = Utils.pct(crypto.eth.change);
+                    document.getElementById('ethChange').className = `commodity-change ${crypto.eth.change >= 0 ? 'up' : 'down'}`;
+                    document.getElementById('cryptoValue').textContent = `$${(crypto.totalMarketCap / 1e12).toFixed(2)}T`;
+                    document.getElementById('cryptoUpdate').textContent = new Date(crypto.timestamp).toLocaleTimeString('pt-BR');
+                }
+                Utils.setLoading('cardCrypto', false);
+
+                // USD/BRL via BrAPI
+                Utils.setLoading('cardUSD', true);
+                const usd = await API.getQuoteBrAPI('USDBRL=X');
+                if (usd) {
+                    document.getElementById('usdPrice').textContent = `R$ ${usd.price.toFixed(4)}`;
+                    document.getElementById('usdChange').textContent = Utils.pct(usd.change);
+                    document.getElementById('usdChange').className = `change ${usd.change >= 0 ? 'up' : 'down'}`;
+                    document.getElementById('usdUpdate').textContent = new Date(usd.timestamp).toLocaleTimeString('pt-BR');
+                }
+                Utils.setLoading('cardUSD', false);
+
+                // Commodities via FMP/AlphaVantage
+                Utils.setLoading('cardCommodities', true);
+                const comm = await this.getCommodities();
+                if (comm.oil) {
+                    document.getElementById('oilPrice').textContent = `$${comm.oil.price.toFixed(2)}`;
+                    document.getElementById('oilChange').textContent = Utils.pct(comm.oil.change);
+                    document.getElementById('oilChange').className = `commodity-change ${comm.oil.change >= 0 ? 'up' : 'down'}`;
+                }
+                if (comm.gold) {
+                    document.getElementById('goldPrice').textContent = `$${comm.gold.price.toFixed(2)}`;
+                    document.getElementById('goldChange').textContent = Utils.pct(comm.gold.change);
+                    document.getElementById('goldChange').className = `commodity-change ${comm.gold.change >= 0 ? 'up' : 'down'}`;
+                }
+                if (comm.copper) {
+                    document.getElementById('copperPrice').textContent = `$${comm.copper.price.toFixed(3)}`;
+                    document.getElementById('copperChange').textContent = Utils.pct(comm.copper.change);
+                    document.getElementById('copperChange').className = `commodity-change ${comm.copper.change >= 0 ? 'up' : 'down'}`;
+                }
+                Utils.setLoading('cardCommodities', false);
+
+                // SELIC & IPCA via BCB
+                const selic = await API.getSELIC();
+                if (selic) {
+                    document.getElementById('selicRate').textContent = `${selic.rate.toFixed(2)}% a.a.`;
+                    document.getElementById('selicDate').textContent = `Referência: ${selic.date}`;
+                    document.getElementById('selicUpdate').textContent = new Date(selic.timestamp).toLocaleTimeString('pt-BR');
+                }
+
+                const ipca = await API.getIPCA();
+                if (ipca) {
+                    document.getElementById('ipcaRate').textContent = `${ipca.rate.toFixed(2)}%`;
+                    document.getElementById('ipcaDate').textContent = `Referência: ${ipca.date}`;
+                    document.getElementById('ipcaUpdate').textContent = new Date(ipca.timestamp).toLocaleTimeString('pt-BR');
+                }
+
+                // Update watchlist prices
+                this.updateWatchlist();
+
+                AppState.lastSync = new Date().toISOString();
+                Utils.updateStatus(errors > 3 ? 'error' : 'connected');
+                if (errors > 0) Utils.toast(`${errors} API(s) com erro`, 'warning');
+            },
+
+            async getIndices() {
+                const symbols = [
+                    { name: 'IBrA', symbol: '^IBRA' },
+                    { name: 'S&P 500', symbol: 'SPX' },
+                    { name: 'Nasdaq', symbol: 'NDX' },
+                    { name: 'Dow Jones', symbol: 'DJI' }
+                ];
+                const results = [];
+                const key = APIConfig.alphaVantage.key;
+
+                for (const { name, symbol } of symbols) {
+                    try {
+                        if (key) {
+                            const data = await API.fetch(`${APIConfig.alphaVantage.base}?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=${key}`);
+                            if (data && data['Global Quote']) {
+                                const q = data['Global Quote'];
+                                results.push({
+                                    name, symbol,
+                                    price: parseFloat(q['05. price']),
+                                    change: parseFloat(q['10. change percent'].replace('%', ''))
+                                });
+                            }
+                        }
+                    } catch (e) { console.warn(`Index ${symbol} error:`, e); }
+                }
+                return results;
+            },
+
+            async getCommodities() {
+                const results = {};
+                const key = APIConfig.fmp.key || APIConfig.alphaVantage.key;
+
+                if (!key) return results;
+
+                const symbols = { oil: 'CL=F', gold: 'GC=F', copper: 'HG=F' };
+
+                for (const [name, symbol] of Object.entries(symbols)) {
+                    try {
+                        const data = await API.fetch(`${APIConfig.fmp.base}/quote/${symbol}?apikey=${key}`);
+                        if (data && data[0]) {
+                            results[name] = {
+                                price: data[0].price,
+                                change: data[0].changesPercentage
+                            };
+                        }
+                    } catch (e) { console.warn(`${name} error:`, e); }
+                }
+                return results;
+            },
+
+            async updateWatchlist() {
+                for (const symbol of AppState.watchlist) {
+                    try {
+                        let data = null;
+                        if (symbol.includes('.SA') || ['^IBOV', '^IBRA', 'USDBRL=X'].includes(symbol)) {
+                            data = await API.getQuoteBrAPI(symbol);
+                        } else if (['BTC-USD', 'ETH-USD'].includes(symbol)) {
+                            const crypto = await API.getCryptoPrices();
+                            if (crypto && symbol === 'BTC-USD') data = { price: crypto.btc.price, change: crypto.btc.change };
+                            if (crypto && symbol === 'ETH-USD') data = { price: crypto.eth.price, change: crypto.eth.change };
+                        } else {
+                            data = await API.getQuoteFinnhub(symbol) || await API.getQuoteAV(symbol);
+                        }
+
+                        if (data) {
+                            const el = document.getElementById(`wl-${symbol.toLowerCase().replace('-usd', '')}`);
+                            const chEl = document.getElementById(`wl-${symbol.toLowerCase().replace('-usd', '')}-change`);
+                            if (el) el.textContent = symbol.includes('USD') ? `$${data.price.toLocaleString('en-US')}` : Utils.money(data.price);
+                            if (chEl) {
+                                chEl.textContent = Utils.pct(data.change);
+                                chEl.className = `watchlist-change ${data.change >= 0 ? 'up' : 'down'}`;
+                            }
+                        }
+                    } catch (e) { }
+                }
+            },
+
+            async getAssetPrice(symbol) {
+                // Tenta múltiplas APIs em cascata
+                let data = null;
+
+                // BrAPI para ativos brasileiros
+                if (symbol.match(/^[A-Z]{4}[34]$/)) {
+                    data = await API.getQuoteBrAPI(symbol);
+                }
+
+                // Finnhub para ações globais
+                if (!data) {
+                    data = await API.getQuoteFinnhub(symbol);
+                }
+
+                // Alpha Vantage fallback
+                if (!data) {
+                    data = await API.getQuoteAV(symbol);
+                }
+
+                // FMP Cloud fallback
+                if (!data) {
+                    data = await API.getQuoteFMP(symbol);
+                }
+
+                return data;
+            },
+
+            async getDividends(symbol) {
+                let dividends = [];
+
+                // BrAPI para Brasil
+                if (symbol.match(/^[A-Z]{4}[34]$/)) {
+                    dividends = await API.getDividendsBrAPI(symbol);
+                }
+
+                // Finnhub fallback
+                if (dividends.length === 0) {
+                    dividends = await API.getDividendsFinnhub(symbol);
+                }
+
+                // FMP fallback
+                if (dividends.length === 0) {
+                    dividends = await API.getDividendsFMP(symbol);
+                }
+
+                return dividends;
+            }
+        };
+
+        // ===== CHARTS =====
         const Charts = {
             init: () => {
                 Chart.defaults.font.family = "'Inter', sans-serif";
                 Chart.defaults.color = getComputedStyle(document.body).getPropertyValue('--text-secondary');
-                Charts.ibov(); Charts.indices(); Charts.crypto(); Charts.usd(); Charts.yield();
             },
-            ibov: () => {
-                const c = document.getElementById('ibovChart'); if (!c) return;
-                const ctx = c.getContext('2d'), g = ctx.createLinearGradient(0, 0, 0, 200);
-                g.addColorStop(0, 'rgba(239,68,68,0.15)'); g.addColorStop(1, 'rgba(239,68,68,0)');
-                AppState.charts.ibov = new Chart(ctx, {
-                    type: 'line', data: {
-                        labels: ['10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'],
-                        datasets: [{ data: [175000, 174200, 173800, 174500, 173200, 173500, 174000, 173787], borderColor: '#ef4444', backgroundColor: g, borderWidth: 2, fill: true, tension: 0.4, pointRadius: 0 }]
-                    }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: true, grid: { display: false } }, y: { display: false, grid: { display: false } } } }
+
+            perf: () => {
+                const c = document.getElementById('portfolioPerformanceChart');
+                if (!c) return;
+                if (AppState.charts.perf) AppState.charts.perf.destroy();
+
+                const period = parseInt(document.getElementById('perfPeriod')?.value || 365);
+                const bd = {}, cm = 0;
+
+                let ops = AppState.operations.sort((a, b) => a.date.localeCompare(b.date));
+                if (period < 365 && period > 0) {
+                    const cutoff = new Date();
+                    cutoff.setDate(cutoff.getDate() - period);
+                    ops = ops.filter(o => new Date(o.date) >= cutoff);
+                }
+
+                ops.forEach(o => {
+                    if (!bd[o.date]) bd[o.date] = 0;
+                    bd[o.date] += o.type === 'compra' ? -o.total : o.total;
+                });
+
+                const lb = Object.keys(bd).map(d => { const [y, m, dy] = d.split('-'); return `${dy}/${m}`; });
+                const dt = Object.values(bd).map(v => cm += v);
+                const up = dt[dt.length - 1] >= 0;
+
+                AppState.charts.perf = new Chart(c, {
+                    type: 'line',
+                    data: {
+                        labels: lb,
+                        datasets: [{
+                            label: 'Performance',
+                            data: dt,
+                            borderColor: up ? '#10b981' : '#ef4444',
+                            backgroundColor: up ? 'rgba(16,185,129,0.1)' : 'rgba(239,68,68,0.1)',
+                            fill: true, tension: 0.4, borderWidth: 2, pointRadius: 3
+                        }]
+                    },
+                    options: {
+                        responsive: true, maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            x: { grid: { display: false } },
+                            y: {
+                                grid: { color: getComputedStyle(document.body).getPropertyValue('--border') },
+                                ticks: {
+                                    color: getComputedStyle(document.body).getPropertyValue('--text-secondary'),
+                                    callback: v => Utils.money(v).replace(/[A-Z$€]/g, '').trim()
+                                }
+                            }
+                        }
+                    }
                 });
             },
-            indices: () => {
-                const d = [{ n: 'IBrA', s: 'IBRA', v: '6.831,29', c: -0.75, cl: '#2563eb' }, { n: 'S&P 500', s: 'SPX', v: '7.580,05', c: -0.22, cl: '#dc2626' },
-                { n: 'Nasdaq 100', s: 'NDX', v: '30.333,18', c: 0.36, cl: '#10b981' }, { n: 'Japão 225', s: 'NI225', v: '66.329,28', c: 2.53, cl: '#7c3aed' },
-                { n: 'China', s: '000001', v: '4.068,57', c: -0.73, cl: '#059669' }, { n: 'FTSE 100', s: 'UKX', v: '10.409,28', c: -0.16, cl: '#6b7280' }];
-                const c = document.getElementById('indicesList'); if (c) c.innerHTML = d.map(x => `
-                    <div class="index-item"><div class="index-info"><div class="index-icon" style="background:${x.cl}">${x.s.slice(0, 2).toUpperCase()}</div>
-                    <div><div class="index-name">${x.n}</div><div class="index-symbol">${x.s}</div></div></div><div class="index-value">
-                    <div class="index-price">${x.v}</div><div class="index-change ${x.c >= 0 ? 'up' : 'down'}">${x.c >= 0 ? '+' : ''}${x.c}%</div></div></div>`).join('');
-            },
-            crypto: () => {
-                const c = document.getElementById('cryptoMarketChart'); if (!c) return;
-                const ctx = c.getContext('2d'), g = ctx.createLinearGradient(0, 0, 0, 120);
-                g.addColorStop(0, 'rgba(239,68,68,0.15)'); g.addColorStop(1, 'rgba(239,68,68,0)');
-                AppState.charts.crypto = new Chart(ctx, { type: 'line', data: { labels: [], datasets: [{ data: [2500, 2480, 2490, 2470, 2460, 2450, 2440, 2430, 2420, 2410, 2400, 2390, 2380, 2370, 2470], borderColor: '#ef4444', backgroundColor: g, borderWidth: 2, fill: true, tension: 0.4, pointRadius: 0 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { display: false } } } });
-            },
-            usd: () => {
-                const c = document.getElementById('usdChart'); if (!c) return;
-                const ctx = c.getContext('2d'), g = ctx.createLinearGradient(0, 0, 0, 120);
-                g.addColorStop(0, 'rgba(16,185,129,0.15)'); g.addColorStop(1, 'rgba(16,185,129,0)');
-                AppState.charts.usd = new Chart(ctx, { type: 'line', data: { labels: [], datasets: [{ data: [5080, 5075, 5070, 5065, 5060, 5055, 5050, 5045, 5040, 5035, 5030, 5025, 5020, 5015, 5036], borderColor: '#10b981', backgroundColor: g, borderWidth: 2, fill: true, tension: 0.4, pointRadius: 0 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { display: false } } } });
-            },
-            yield: () => {
-                const c = document.getElementById('brasilYieldChart'); if (!c) return;
-                const ctx = c.getContext('2d'), g = ctx.createLinearGradient(0, 0, 0, 120);
-                g.addColorStop(0, 'rgba(16,185,129,0.15)'); g.addColorStop(1, 'rgba(16,185,129,0)');
-                AppState.charts.yield = new Chart(ctx, { type: 'line', data: { labels: [], datasets: [{ data: [6300, 6320, 6310, 6330, 6350, 6340, 6360, 6380, 6370, 6390, 6410, 6400, 6420, 6440, 6467], borderColor: '#10b981', backgroundColor: g, borderWidth: 2, fill: true, tension: 0.4, pointRadius: 0 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { display: false } } } });
-            },
-            perf: () => {
-                const c = document.getElementById('portfolioPerformanceChart'); if (!c) return;
-                if (AppState.charts.perf) AppState.charts.perf.destroy();
-                const bd = {}, cm = 0;
-                AppState.operations.sort((a, b) => a.date.localeCompare(b.date)).forEach(o => { if (!bd[o.date]) bd[o.date] = 0; bd[o.date] += o.type === 'compra' ? -o.total : o.total; });
-                const lb = Object.keys(bd).map(d => { const [y, m, dy] = d.split('-'); return `${dy}/${m}`; }), dt = Object.values(bd).map(v => cm += v), up = dt[dt.length - 1] >= 0;
-                AppState.charts.perf = new Chart(c, { type: 'line', data: { labels: lb, datasets: [{ label: 'Performance', data: dt, borderColor: up ? '#10b981' : '#ef4444', backgroundColor: up ? 'rgba(16,185,129,0.1)' : 'rgba(239,68,68,0.1)', fill: true, tension: 0.4, borderWidth: 2, pointRadius: 3 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false } }, y: { grid: { color: getComputedStyle(document.body).getPropertyValue('--border') }, ticks: { color: getComputedStyle(document.body).getPropertyValue('--text-secondary'), callback: v => Utils.money(v).replace(/[A-Z$€]/g, '').trim() } } } } });
-            },
+
             dist: () => {
-                const c = document.getElementById('assetDistributionChart'); if (!c) return;
+                const c = document.getElementById('assetDistributionChart');
+                if (!c) return;
                 if (AppState.charts.dist) AppState.charts.dist.destroy();
-                const as = {}; AppState.operations.filter(o => o.type === 'compra').forEach(o => { as[o.asset] = (as[o.asset] || 0) + o.total; });
+
+                const as = {};
+                AppState.operations.filter(o => o.type === 'compra').forEach(o => {
+                    as[o.asset] = (as[o.asset] || 0) + o.total;
+                });
+
                 const tp = Object.entries(as).sort((a, b) => b[1] - a[1]).slice(0, 8);
-                AppState.charts.dist = new Chart(c, { type: 'doughnut', data: { labels: tp.map(([a]) => a), datasets: [{ data: tp.map(([, v]) => v), backgroundColor: ['#667eea', '#764ba2', '#f093fb', '#4facfe', '#11998e', '#38ef7d', '#f59e0b', '#ec4899'], borderWidth: 2, borderColor: getComputedStyle(document.body).getPropertyValue('--bg-card') }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { font: { size: 11 }, color: getComputedStyle(document.body).getPropertyValue('--text') } } } } });
+
+                AppState.charts.dist = new Chart(c, {
+                    type: 'doughnut',
+                    data: {
+                        labels: tp.map(([a]) => a),
+                        datasets: [{
+                            data: tp.map(([, v]) => v),
+                            backgroundColor: ['#667eea', '#764ba2', '#f093fb', '#4facfe', '#11998e', '#38ef7d', '#f59e0b', '#ec4899'],
+                            borderWidth: 2,
+                            borderColor: getComputedStyle(document.body).getPropertyValue('--bg-card')
+                        }]
+                    },
+                    options: {
+                        responsive: true, maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'right',
+                                labels: { font: { size: 11 }, color: getComputedStyle(document.body).getPropertyValue('--text') }
+                            }
+                        }
+                    }
+                });
+            },
+
+            dividendYield: () => {
+                const c = document.getElementById('dividendYieldChart');
+                if (!c) return;
+                if (AppState.charts.divYield) AppState.charts.divYield.destroy();
+
+                // Dados simulados - em produção, buscar via API
+                const data = [
+                    { asset: 'PETR4', yield: 3.2 },
+                    { asset: 'VALE3', yield: 4.6 },
+                    { asset: 'ITUB4', yield: 1.2 },
+                    { asset: 'BBDC4', yield: 2.1 },
+                    { asset: 'ABEV3', yield: 5.8 }
+                ];
+
+                AppState.charts.divYield = new Chart(c, {
+                    type: 'bar',
+                    data: {
+                        labels: data.map(d => d.asset),
+                        datasets: [{
+                            label: 'Dividend Yield (%)',
+                            data: data.map(d => d.yield),
+                            backgroundColor: data.map(d => d.yield >= 4 ? '#10b981' : d.yield >= 2 ? '#f59e0b' : '#ef4444'),
+                            borderRadius: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true, maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: { display: true, text: 'Yield (%)' }
+                            }
+                        }
+                    }
+                });
+            },
+
+            equity: () => {
+                const c = document.getElementById('equityChart');
+                if (!c) return;
+                if (AppState.charts.equity) AppState.charts.equity.destroy();
+
+                // Simular evolução do patrimônio
+                const labels = [];
+                const data = [];
+                let value = 10000;
+                const today = new Date();
+
+                for (let i = 30; i >= 0; i--) {
+                    const d = new Date(today);
+                    d.setDate(d.getDate() - i);
+                    labels.push(d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }));
+                    value += (Math.random() - 0.48) * 500;
+                    data.push(Math.max(value, 0));
+                }
+
+                AppState.charts.equity = new Chart(c, {
+                    type: 'line',
+                    data: {
+                        labels,
+                        datasets: [{
+                            label: 'Patrimônio',
+                            data,
+                            borderColor: '#667eea',
+                            backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                            fill: true, tension: 0.4, borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true, maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            x: { grid: { display: false } },
+                            y: {
+                                grid: { color: getComputedStyle(document.body).getPropertyValue('--border') },
+                                ticks: { callback: v => Utils.money(v).replace(/[A-Z$€]/g, '').trim() }
+                            }
+                        }
+                    }
+                });
+            },
+
+            dividendMonthly: () => {
+                const c = document.getElementById('dividendMonthlyChart');
+                if (!c) return;
+                if (AppState.charts.divMonthly) AppState.charts.divMonthly.destroy();
+
+                const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+                const data = Array(12).fill(0).map(() => Math.random() * 500);
+
+                AppState.charts.divMonthly = new Chart(c, {
+                    type: 'bar',
+                    data: {
+                        labels: months,
+                        datasets: [{
+                            label: 'Dividendos (R$)',
+                            data,
+                            backgroundColor: '#f59e0b',
+                            borderRadius: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true, maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: { callback: v => Utils.money(v).replace(/[A-Z$€]/g, '').trim() }
+                            }
+                        }
+                    }
+                });
             }
         };
 
+        // ===== DASHBOARD =====
         const Dashboard = {
             update: () => {
-                const bs = AppState.operations.filter(o => o.type === 'compra'), ss = AppState.operations.filter(o => o.type === 'venda'),
-                    ti = bs.reduce((s, o) => s + o.total, 0), ts = ss.reduce((s, o) => s + o.total, 0), pl = ts - ti;
+                const bs = AppState.operations.filter(o => o.type === 'compra');
+                const ss = AppState.operations.filter(o => o.type === 'venda');
+                const ti = bs.reduce((s, o) => s + o.total, 0);
+                const ts = ss.reduce((s, o) => s + o.total, 0);
+                const pl = ts - ti;
+
+                // Calcular dividendos (simulado)
+                const dividends = bs.reduce((s, o) => s + (o.total * 0.03), 0); // 3% yield estimado
+
                 document.getElementById('totalInvested').textContent = Utils.money(ti, AppState.settings.currency);
                 document.getElementById('realizedPL').textContent = Utils.money(pl, AppState.settings.currency);
                 document.getElementById('realizedPL').style.color = pl >= 0 ? 'var(--up)' : 'var(--down)';
+                document.getElementById('totalDividends').textContent = Utils.money(dividends, AppState.settings.currency);
                 document.getElementById('totalAssets').textContent = new Set(AppState.operations.map(o => o.asset)).size;
                 document.getElementById('totalOperations').textContent = AppState.operations.length;
-                Charts.perf(); Charts.dist();
+
+                Charts.perf();
+                Charts.dist();
             }
         };
 
+        // ===== OPERATIONS =====
         const Ops = {
-            add: (d) => { const o = { id: Utils.id(), ...d, total: parseFloat((d.quantity * d.price).toFixed(2)), createdAt: new Date().toISOString() }; AppState.operations.push(o); Storage.save(); return o; },
-            del: async (id) => { if (await Utils.confirm('Excluir esta operação?')) { AppState.operations = AppState.operations.filter(o => o.id !== id); Storage.save(); App.upd(); Utils.toast('Operação excluída', 'success'); } },
+            add: (d) => {
+                const o = {
+                    id: Utils.id(),
+                    ...d,
+                    total: parseFloat((d.quantity * d.price).toFixed(2)),
+                    createdAt: new Date().toISOString()
+                };
+                AppState.operations.push(o);
+                Storage.save();
+                return o;
+            },
+
+            del: async (id) => {
+                if (await Utils.confirm('Excluir esta operação?')) {
+                    AppState.operations = AppState.operations.filter(o => o.id !== id);
+                    Storage.save();
+                    App.upd();
+                    Utils.toast('Operação excluída', 'success');
+                }
+            },
+
             filter: () => {
                 let f = [...AppState.operations];
                 if (AppState.filters.type !== 'all') f = f.filter(o => o.type === AppState.filters.type);
                 if (AppState.filters.category !== 'all') f = f.filter(o => o.category === AppState.filters.category);
-                if (AppState.filters.asset) { const t = AppState.filters.asset.toLowerCase(); f = f.filter(o => o.asset.toLowerCase().includes(t)); }
+                if (AppState.filters.asset) {
+                    const t = AppState.filters.asset.toLowerCase();
+                    f = f.filter(o => o.asset.toLowerCase().includes(t));
+                }
                 return f.sort((a, b) => b.date.localeCompare(a.date));
             },
+
             table: () => {
-                const tb = document.getElementById('operationsBody'), em = document.getElementById('noOperations'), fl = Ops.filter();
+                const tb = document.getElementById('operationsBody');
+                const em = document.getElementById('noOperations');
+                const fl = Ops.filter();
+
                 document.getElementById('recordCount').textContent = `${fl.length} registro${fl.length !== 1 ? 's' : ''}`;
+
                 if (fl.length === 0) { tb.innerHTML = ''; em.style.display = 'block'; return; }
                 em.style.display = 'none';
-                tb.innerHTML = fl.map(o => `<tr><td>${Utils.date(o.date)}</td><td><span class="badge badge-${o.type === 'compra' ? 'buy' : 'sell'}">${o.type === 'compra' ? 'Compra' : 'Venda'}</span></td><td><strong>${o.asset}</strong></td><td>${Utils.cat(o.category)}</td><td>${o.quantity.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 4 })}</td><td>${Utils.money(o.price, AppState.settings.currency)}</td><td><strong>${Utils.money(o.total, AppState.settings.currency)}</strong></td><td style="color:var(--text-muted);font-size:13px;">${o.notes || '-'}</td><td><button class="btn btn-secondary" onclick="Ops.del('${o.id}')" style="padding:4px 8px;font-size:12px;"><i class="fas fa-trash"></i></button></td></tr>`).join('');
+
+                tb.innerHTML = fl.map(o => `
+                    <tr>
+                        <td>${Utils.date(o.date)}</td>
+                        <td><span class="badge badge-${o.type === 'compra' ? 'buy' : 'sell'}">${o.type === 'compra' ? 'Compra' : 'Venda'}</span></td>
+                        <td><strong>${o.asset}</strong></td>
+                        <td>${Utils.cat(o.category)}</td>
+                        <td>${o.quantity.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 4 })}</td>
+                        <td>${Utils.money(o.price, AppState.settings.currency)}</td>
+                        <td><strong>${Utils.money(o.total, AppState.settings.currency)}</strong></td>
+                        <td style="color:var(--text-muted);font-size:13px;">${o.notes || '-'}</td>
+                        <td><button class="btn btn-secondary" onclick="Ops.del('${o.id}')" style="padding:4px 8px;font-size:12px;"><i class="fas fa-trash"></i></button></td>
+                    </tr>
+                `).join('');
             },
-            port: () => {
-                const tb = document.getElementById('portfolioBody'), em = document.getElementById('noPortfolio');
+
+            port: async () => {
+                const tb = document.getElementById('portfolioBody');
+                const em = document.getElementById('noPositions');
+
                 if (AppState.operations.length === 0) { tb.innerHTML = ''; em.style.display = 'block'; return; }
                 em.style.display = 'none';
-                const as = {}; AppState.operations.forEach(o => {
+
+                const as = {};
+                AppState.operations.forEach(o => {
                     if (!as[o.asset]) as[o.asset] = { asset: o.asset, category: o.category, bq: 0, bv: 0, sq: 0, sv: 0 };
                     if (o.type === 'compra') { as[o.asset].bq += o.quantity; as[o.asset].bv += o.total; }
                     else { as[o.asset].sq += o.quantity; as[o.asset].sv += o.total; }
                 });
+
+                // Buscar preços atuais
+                for (const asset of Object.values(as)) {
+                    const priceData = await MarketData.getAssetPrice(asset.asset);
+                    asset.currentPrice = priceData?.price || (asset.bq > 0 ? asset.bv / asset.bq : 0);
+
+                    // Buscar dividend yield (simulado)
+                    asset.divYield = Math.random() * 5 + 1; // 1-6%
+                }
+
                 tb.innerHTML = Object.values(as).map(a => {
-                    const nq = a.bq - a.sq, ap = a.bq > 0 ? a.bv / a.bq : 0, pl = a.sv - (a.sq * ap), nv = a.sv - a.bv;
-                    return `<tr><td><strong>${a.asset}</strong></td><td>${Utils.cat(a.category)}</td><td>${a.bq.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</td><td>${Utils.money(a.sv, AppState.settings.currency)}</td><td style="color:${nq >= 0 ? 'var(--up)' : 'var(--down)'}">${nq.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</td><td style="color:${nv >= 0 ? 'var(--up)' : 'var(--down)'}">${Utils.money(nv, AppState.settings.currency)}</td><td>${Utils.money(ap, AppState.settings.currency)}</td><td style="color:${pl >= 0 ? 'var(--up)' : 'var(--down)'}">${Utils.money(pl, AppState.settings.currency)}</td></tr>`;
+                    const nq = a.bq - a.sq;
+                    const ap = a.bq > 0 ? a.bv / a.bq : 0;
+                    const pl = (a.currentPrice * nq) - a.bv + a.sv;
+                    const nv = a.currentPrice * nq;
+                    const plPct = a.bv > 0 ? (pl / a.bv) * 100 : 0;
+
+                    return `
+                        <tr>
+                            <td><strong>${a.asset}</strong></td>
+                            <td>${Utils.cat(a.category)}</td>
+                            <td>${nq.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</td>
+                            <td>${Utils.money(ap, AppState.settings.currency)}</td>
+                            <td>${Utils.money(a.currentPrice, AppState.settings.currency)}</td>
+                            <td style="font-weight:600">${Utils.money(nv, AppState.settings.currency)}</td>
+                            <td style="color:${pl >= 0 ? 'var(--up)' : 'var(--down)'}">${Utils.money(pl, AppState.settings.currency)}</td>
+                            <td><span class="${plPct >= 0 ? 'change up' : 'change down'}">${Utils.pct(plPct)}</span></td>
+                            <td><span class="badge badge-dividend">${a.divYield?.toFixed(1) || '-'}%</span></td>
+                        </tr>
+                    `;
                 }).join('');
+
+                // Atualizar KPIs do portfólio
+                const totalValue = Object.values(as).reduce((s, a) => s + (a.currentPrice * (a.bq - a.sq)), 0);
+                const totalInvested = Object.values(as).reduce((s, a) => s + a.bv, 0);
+                const totalPL = totalValue - totalInvested;
+                const avgYield = Object.values(as).reduce((s, a) => s + (a.divYield || 0), 0) / Object.keys(as).length;
+
+                document.getElementById('portfolioValue').textContent = Utils.money(totalValue, AppState.settings.currency);
+                document.getElementById('portfolioInvested').textContent = Utils.money(totalInvested, AppState.settings.currency);
+                document.getElementById('portfolioPL').textContent = Utils.money(totalPL, AppState.settings.currency);
+                document.getElementById('portfolioPL').style.color = totalPL >= 0 ? 'var(--up)' : 'var(--down)';
+                document.getElementById('portfolioPLPercent').textContent = `${Utils.pct(totalInvested > 0 ? (totalPL / totalInvested) * 100 : 0)}`;
+                document.getElementById('portfolioPLPercent').style.color = totalPL >= 0 ? 'var(--up)' : 'var(--down)';
+                document.getElementById('portfolioAssets').textContent = Object.keys(as).length;
+                document.getElementById('portfolioYield').textContent = `${avgYield.toFixed(2)}%`;
+
+                const plCard = document.getElementById('plCard');
+                plCard.className = `kpi-card ${totalPL >= 0 ? 'success' : 'danger'}`;
             }
         };
 
+        // ===== APP =====
         const App = {
-            init: () => { Storage.load(); App.evt(); App.date(); Charts.init(); App.upd(); setInterval(Storage.save, AppConfig.autoSave); },
+            init: () => {
+                Storage.load();
+                App.evt();
+                App.date();
+                Charts.init();
+                App.upd();
+                MarketData.refresh();
+                setInterval(Storage.save, 30000);
+            },
+
             evt: () => {
-                document.getElementById('menuToggle').addEventListener('click', () => document.getElementById('sidebar').classList.toggle('active'));
+                // Menu mobile
+                document.getElementById('menuToggle').addEventListener('click', () =>
+                    document.getElementById('sidebar').classList.toggle('active'));
+
+                // Navegação
                 document.querySelectorAll('.nav-item').forEach(it => it.addEventListener('click', () => {
-                    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active')); it.classList.add('active');
+                    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                    it.classList.add('active');
                     document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
                     document.getElementById(`tab-${it.dataset.tab}`).classList.add('active');
                     document.getElementById('pageTitle').textContent = it.querySelector('span').textContent;
+
                     if (it.dataset.tab === 'dashboard') Dashboard.update();
+                    if (it.dataset.tab === 'mercado') MarketData.refresh();
                     if (it.dataset.tab === 'portfolio') Ops.port();
                     if (it.dataset.tab === 'operacoes') Ops.table();
+                    if (it.dataset.tab === 'dividendos') Charts.dividendYield();
+                    if (it.dataset.tab === 'analise') { Charts.equity(); Charts.dividendMonthly(); }
+
                     if (window.innerWidth <= 768) document.getElementById('sidebar').classList.remove('active');
                 }));
+
+                // Formulário de operações
                 document.getElementById('operationForm').addEventListener('submit', e => {
-                    e.preventDefault(); const btn = e.target.querySelector('button[type="submit"]'); btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Salvando...';
+                    e.preventDefault();
+                    const btn = e.target.querySelector('button[type="submit"]');
+                    btn.disabled = true;
+                    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Salvando...';
+
                     try {
-                        const d = { type: document.getElementById('type').value, asset: document.getElementById('asset').value.toUpperCase().trim(), quantity: parseFloat(document.getElementById('quantity').value), price: parseFloat(document.getElementById('price').value), date: document.getElementById('date').value, category: document.getElementById('category').value, notes: document.getElementById('notes').value.trim() };
-                        Ops.add(d); e.target.reset(); document.getElementById('date').valueAsDate = new Date(); document.getElementById('totalValue').textContent = Utils.money(0);
-                        App.upd(); Utils.toast('Operação adicionada!', 'success');
-                    } catch (err) { Utils.toast('Erro ao adicionar', 'error'); }
-                    finally { btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i> Adicionar Operação'; }
-                });
-                ['quantity', 'price'].forEach(id => document.getElementById(id).addEventListener('input', () => {
-                    const q = parseFloat(document.getElementById('quantity').value) || 0, p = parseFloat(document.getElementById('price').value) || 0;
-                    document.getElementById('totalValue').textContent = Utils.money(q * p);
-                }));
-                document.getElementById('applyFilters').addEventListener('click', () => { AppState.filters = { type: document.getElementById('filterType').value, category: document.getElementById('filterCategory').value, asset: document.getElementById('filterAsset').value }; Ops.table(); });
-                document.getElementById('clearFilters').addEventListener('click', () => { document.getElementById('filterType').value = 'all'; document.getElementById('filterCategory').value = 'all'; document.getElementById('filterAsset').value = ''; AppState.filters = { type: 'all', category: 'all', asset: '' }; Ops.table(); });
-                document.getElementById('addOperationQuick').addEventListener('click', () => { document.querySelector('[data-tab="operacoes"]').click(); document.getElementById('asset').focus(); });
-                document.getElementById('exportData').addEventListener('click', () => {
-                    const b = new Blob([JSON.stringify(AppState.operations, null, 2)], { type: 'application/json' }), a = document.createElement('a');
-                    a.href = URL.createObjectURL(b); a.download = `finpro-backup-${new Date().toISOString().split('T')[0]}.json`; a.click(); Utils.toast('Backup exportado!', 'success');
-                });
-                document.getElementById('importData').addEventListener('click', () => document.getElementById('importFile').click());
-                document.getElementById('importFile').addEventListener('change', e => {
-                    const f = e.target.files[0]; if (!f) return; const r = new FileReader();
-                    r.onload = evt => { try { const im = JSON.parse(evt.target.result); if (Array.isArray(im)) { AppState.operations = [...AppState.operations, ...im]; Storage.save(); App.upd(); Utils.toast(`${im.length} operações importadas!`, 'success'); } } catch { Utils.toast('Erro ao importar', 'error'); } };
-                    r.readAsText(f); e.target.value = '';
-                });
-                document.getElementById('toggleTheme').addEventListener('click', () => { AppState.settings.theme = AppState.settings.theme === 'light' ? 'dark' : 'light'; Storage.saveSettings(); Charts.perf(); Charts.dist(); });
-                document.getElementById('saveSettings').addEventListener('click', () => { AppState.settings.currency = document.getElementById('currencySetting').value; AppState.settings.theme = document.getElementById('themeSetting').value; AppState.settings.autoUpdate = document.getElementById('autoUpdateSetting').value; Storage.saveSettings(); App.upd(); Utils.toast('Configurações salvas!', 'success'); });
-                document.getElementById('resetData').addEventListener('click', async () => { if (await Utils.confirm('Limpar TODOS os dados?')) { localStorage.removeItem(AppConfig.storageKey); AppState.operations = []; App.upd(); Utils.toast('Dados limpos!', 'success'); } });
-                document.getElementById('generateAnalysis').addEventListener('click', () => {
-                    const pd = parseInt(document.getElementById('analysisPeriod').value), mt = document.getElementById('analysisMetric').value;
-                    let fl = AppState.operations; if (pd < 365 && pd > 0) { const ct = new Date(); ct.setDate(ct.getDate() - pd); fl = fl.filter(o => new Date(o.date) >= ct); }
-                    const rs = document.getElementById('analysisResult');
-                    if (mt === 'pl') {
-                        const bs = fl.filter(o => o.type === 'compra').reduce((s, o) => s + o.total, 0), ss = fl.filter(o => o.type === 'venda').reduce((s, o) => s + o.total, 0), pl = ss - bs;
-                        rs.innerHTML = `<div class="kpi-card" style="text-align:center;"><div class="kpi-label">Resultado do Período</div><div class="kpi-value" style="color:${pl >= 0 ? 'var(--up)' : 'var(--down)'}">${Utils.money(pl, AppState.settings.currency)}</div><div style="color:var(--text-muted);">${fl.length} operações</div></div>`;
+                        const d = {
+                            type: document.getElementById('type').value,
+                            asset: document.getElementById('asset').value.toUpperCase().trim(),
+                            quantity: parseFloat(document.getElementById('quantity').value),
+                            price: parseFloat(document.getElementById('price').value),
+                            date: document.getElementById('date').value,
+                            category: document.getElementById('category').value,
+                            notes: document.getElementById('notes').value.trim()
+                        };
+                        Ops.add(d);
+                        e.target.reset();
+                        document.getElementById('date').valueAsDate = new Date();
+                        document.getElementById('totalValue').textContent = Utils.money(0);
+                        App.upd();
+                        Utils.toast('Operação adicionada!', 'success');
+                    } catch (err) {
+                        Utils.toast('Erro ao adicionar: ' + err.message, 'error');
+                    } finally {
+                        btn.disabled = false;
+                        btn.innerHTML = '<i class="fas fa-save"></i> Adicionar Operação';
                     }
                 });
+
+                // Cálculo automático do total
+                ['quantity', 'price'].forEach(id =>
+                    document.getElementById(id).addEventListener('input', () => {
+                        const q = parseFloat(document.getElementById('quantity').value) || 0;
+                        const p = parseFloat(document.getElementById('price').value) || 0;
+                        document.getElementById('totalValue').textContent = Utils.money(q * p);
+                    }));
+
+                // Filtros
+                document.getElementById('applyFilters').addEventListener('click', () => {
+                    AppState.filters = {
+                        type: document.getElementById('filterType').value,
+                        category: document.getElementById('filterCategory').value,
+                        asset: document.getElementById('filterAsset').value
+                    };
+                    Ops.table();
+                });
+
+                document.getElementById('clearFilters').addEventListener('click', () => {
+                    document.getElementById('filterType').value = 'all';
+                    document.getElementById('filterCategory').value = 'all';
+                    document.getElementById('filterAsset').value = '';
+                    AppState.filters = { type: 'all', category: 'all', asset: '' };
+                    Ops.table();
+                });
+
+                // Botões de ação
+                document.getElementById('addOperationQuick').addEventListener('click', () => {
+                    document.querySelector('[data-tab="operacoes"]').click();
+                    document.getElementById('asset').focus();
+                });
+
+                document.getElementById('refreshData').addEventListener('click', () => {
+                    Cache.clear();
+                    MarketData.refresh();
+                    Utils.toast('Dados atualizados', 'info');
+                });
+
+                document.getElementById('refreshDividends').addEventListener('click', async () => {
+                    Utils.toast('Buscando dividendos...', 'info');
+                    // Em produção: buscar via API
+                });
+
+                document.getElementById('refreshPortfolio').addEventListener('click', () => {
+                    Cache.clear();
+                    Ops.port();
+                    Utils.toast('Preços atualizados', 'info');
+                });
+
+                // Export/Import
+                document.getElementById('exportData').addEventListener('click', () => {
+                    const b = new Blob([JSON.stringify({
+                        operations: AppState.operations,
+                        settings: AppState.settings,
+                        exportDate: new Date().toISOString()
+                    }, null, 2)], { type: 'application/json' });
+                    const a = document.createElement('a');
+                    a.href = URL.createObjectURL(b);
+                    a.download = `finpro-backup-${new Date().toISOString().split('T')[0]}.json`;
+                    a.click();
+                    Utils.toast('Backup exportado!', 'success');
+                });
+
+                document.getElementById('importData').addEventListener('click', () =>
+                    document.getElementById('importFile').click());
+
+                document.getElementById('importFile').addEventListener('change', e => {
+                    const f = e.target.files[0];
+                    if (!f) return;
+                    const r = new FileReader();
+                    r.onload = evt => {
+                        try {
+                            const data = JSON.parse(evt.target.result);
+                            if (data.operations) {
+                                AppState.operations = [...AppState.operations, ...data.operations];
+                                if (data.settings) AppState.settings = { ...AppState.settings, ...data.settings };
+                                Storage.save();
+                                Storage.saveSettings();
+                                App.upd();
+                                Utils.toast(`${data.operations.length} operações importadas!`, 'success');
+                            }
+                        } catch {
+                            Utils.toast('Erro ao importar arquivo', 'error');
+                        }
+                    };
+                    r.readAsText(f);
+                    e.target.value = '';
+                });
+
+                // Tema
+                document.getElementById('toggleTheme').addEventListener('click', () => {
+                    AppState.settings.theme = AppState.settings.theme === 'light' ? 'dark' : 'light';
+                    Storage.saveSettings();
+                    Charts.perf(); Charts.dist();
+                });
+
+                // Salvar configurações
+                document.getElementById('saveSettings').addEventListener('click', () => {
+                    AppState.settings.currency = document.getElementById('currencySetting').value;
+                    AppState.settings.theme = document.getElementById('themeSetting').value;
+                    AppState.settings.refreshInterval = parseInt(document.getElementById('refreshInterval').value);
+                    AppState.settings.cacheTtl = parseInt(document.getElementById('cacheTtl').value);
+                    AppState.settings.apiKeys = {
+                        brapi: document.getElementById('brapiToken').value,
+                        alphaVantage: document.getElementById('alphaVantageKey').value,
+                        finnhub: document.getElementById('finnhubKey').value,
+                        fmp: document.getElementById('fmpKey').value
+                    };
+
+                    // Atualizar API config
+                    APIConfig.brapi.token = AppState.settings.apiKeys.brapi;
+                    APIConfig.alphaVantage.key = AppState.settings.apiKeys.alphaVantage;
+                    APIConfig.finnhub.key = AppState.settings.apiKeys.finnhub;
+                    APIConfig.fmp.key = AppState.settings.apiKeys.fmp;
+
+                    Cache.setTTL(AppState.settings.cacheTtl);
+                    Storage.saveSettings();
+                    Cache.clear();
+                    MarketData.refresh();
+                    Utils.toast('Configurações salvas!', 'success');
+                });
+
+                // Testar conexões
+                document.getElementById('testConnections').addEventListener('click', async () => {
+                    Utils.toast('Testando conexões...', 'info');
+                    let results = [];
+
+                    // Testar BrAPI
+                    try {
+                        await API.getQuoteBrAPI('PETR4');
+                        results.push('✅ BrAPI');
+                    } catch { results.push('❌ BrAPI'); }
+
+                    // Testar Alpha Vantage
+                    try {
+                        await API.getQuoteAV('AAPL');
+                        results.push('✅ Alpha Vantage');
+                    } catch { results.push('❌ Alpha Vantage'); }
+
+                    // Testar Finnhub
+                    try {
+                        await API.getQuoteFinnhub('AAPL');
+                        results.push('✅ Finnhub');
+                    } catch { results.push('❌ Finnhub'); }
+
+                    // Testar FMP
+                    try {
+                        await API.getQuoteFMP('AAPL');
+                        results.push('✅ FMP Cloud');
+                    } catch { results.push('❌ FMP Cloud'); }
+
+                    Utils.toast(results.join(' • '), results.every(r => r.startsWith('✅')) ? 'success' : 'warning', 5000);
+                });
+
+                // Reset dados
+                document.getElementById('resetData').addEventListener('click', async () => {
+                    if (await Utils.confirm('Limpar TODOS os dados? Esta ação não pode ser desfeita.')) {
+                        localStorage.removeItem('finpro_v5');
+                        localStorage.removeItem('finpro_settings_v5');
+                        AppState.operations = [];
+                        Cache.clear();
+                        App.upd();
+                        Utils.toast('Dados limpos! Recarregue a página.', 'success');
+                    }
+                });
+
+                // Análise
+                document.getElementById('generateAnalysis').addEventListener('click', () => {
+                    const pd = parseInt(document.getElementById('analysisPeriod').value);
+                    const mt = document.getElementById('analysisMetric').value;
+                    let fl = AppState.operations;
+
+                    if (pd < 365 && pd > 0) {
+                        const ct = new Date();
+                        ct.setDate(ct.getDate() - pd);
+                        fl = fl.filter(o => new Date(o.date) >= ct);
+                    }
+
+                    const rs = document.getElementById('analysisResult');
+
+                    if (mt === 'pl') {
+                        const bs = fl.filter(o => o.type === 'compra').reduce((s, o) => s + o.total, 0);
+                        const ss = fl.filter(o => o.type === 'venda').reduce((s, o) => s + o.total, 0);
+                        const pl = ss - bs;
+                        rs.innerHTML = `
+                            <div class="kpi-card" style="text-align:center">
+                                <div class="kpi-label">Resultado do Período</div>
+                                <div class="kpi-value" style="color:${pl >= 0 ? 'var(--up)' : 'var(--down)'}">
+                                    ${Utils.money(pl, AppState.settings.currency)}
+                                </div>
+                                <div style="color:var(--text-muted)">${fl.length} operações</div>
+                            </div>`;
+                    } else if (mt === 'dividends') {
+                        const divs = fl.filter(o => o.type === 'compra').reduce((s, o) => s + (o.total * 0.03), 0);
+                        rs.innerHTML = `
+                            <div class="kpi-card warning" style="text-align:center">
+                                <div class="kpi-label">Dividendos Estimados</div>
+                                <div class="kpi-value">${Utils.money(divs, AppState.settings.currency)}</div>
+                                <div style="color:var(--text-muted)">Yield médio: ~3%</div>
+                            </div>`;
+                    }
+                });
+
+                // Watchlist modal
+                document.getElementById('addWatchlistBtn').addEventListener('click', () =>
+                    document.getElementById('watchlistModal').classList.add('active'));
             },
-            date: () => { const n = new Date(); document.getElementById('currentDate').textContent = n.toLocaleDateString('pt-BR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }); },
-            upd: () => { Dashboard.update(); Ops.table(); Ops.port(); }
+
+            date: () => {
+                const n = new Date();
+                document.getElementById('currentDate').textContent = n.toLocaleDateString('pt-BR', {
+                    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+                });
+            },
+
+            upd: () => { Dashboard.update(); Ops.table(); },
+
+            updateStorageInfo: () => Storage.updateStorageInfo()
         };
 
-        document.addEventListener('DOMContentLoaded', App.init);
+        // ===== GLOBAL FUNCTIONS =====
+        window.toggleKeyVisibility = (id) => {
+            const input = document.getElementById(id);
+            input.type = input.type === 'password' ? 'text' : 'password';
+        };
+
+        window.closeWatchlistModal = () =>
+            document.getElementById('watchlistModal').classList.remove('active');
+
+        window.addToWatchlistFromModal = () => {
+            const symbol = document.getElementById('wlSymbol').value.toUpperCase().trim();
+            const name = document.getElementById('wlName').value.trim();
+
+            if (symbol && !AppState.watchlist.includes(symbol)) {
+                AppState.watchlist.push(symbol);
+                Utils.toast(`${symbol} adicionado à watchlist`, 'success');
+                closeWatchlistModal();
+                MarketData.updateWatchlist();
+            }
+        };
+
         window.Ops = Ops;
+
+        // ===== INIT =====
+        document.addEventListener('DOMContentLoaded', App.init);
     </script>
 </body>
 
